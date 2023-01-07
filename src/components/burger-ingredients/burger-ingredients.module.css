@@ -1,0 +1,34 @@
+.mainSection {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  height: calc(100vh - 166px);
+}
+.tabs {
+  display: flex;
+}
+.content {
+  flex-grow: 1;
+  overflow-y: auto;
+  
+}
+::-webkit-scrollbar {
+  width: 8px;
+  background: #2F2F37;
+  margin-left: 8px;
+}
+::-webkit-scrollbar-thumb {
+  background-color: #8585AD;
+}
+.ingridientsSection {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+.ingridient {
+  position: relative;
+  text-align: center;
+}
+.price {
+  margin: 4px auto;
+  justify-content: center;
+}

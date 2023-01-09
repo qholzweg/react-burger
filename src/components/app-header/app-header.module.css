@@ -1,0 +1,25 @@
+.header {
+  background: #1C1C21;
+}
+.container {
+  max-width: calc(var(--container-width) + var(--offset-base-size) * 5 * 2);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 290px 1fr;
+}
+.left, .right,.logo {
+  display: flex;
+}
+.logo {
+  align-items: center;
+}
+.right {
+  justify-self: flex-end;
+}
+
+.link {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  height: 22px;
+}

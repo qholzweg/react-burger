@@ -1,0 +1,36 @@
+.constructorSection {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  list-style: none;
+  max-height: calc(100vh - 326px);
+  margin: 0 0 40px 0;
+}
+.topbun, .bottombun {
+  margin-left: 58px;
+  display: flex;
+  justify-content: flex-end;
+  padding-right: 16px;
+}
+.filling {
+  flex-grow: 1;
+  overflow-y: scroll;
+  padding-right: 8px;
+}
+.filling ul {
+  padding-left: 0;
+  gap: 10px;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+.filling li {
+  display: flex;
+  align-items: center;
+}
+.order {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}

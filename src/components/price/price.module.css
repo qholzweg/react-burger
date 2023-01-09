@@ -1,0 +1,12 @@
+.priceBlock {
+  display: flex;
+  align-items: center;
+}
+.medium svg {
+  width: 33px;
+  height: 33px;
+}
+.large svg {
+  width: 70px;
+  height: 70px;
+}

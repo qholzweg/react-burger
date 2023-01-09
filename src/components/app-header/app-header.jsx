@@ -17,15 +17,17 @@ HeaderLink.defaultProps = {
 const AppHeader = () => {
   return (
     <header className={styles.header}>
-      <nav className={styles.left}>
-        <HeaderLink href="#" icon={<BurgerIcon type="primary" />} text="Конструктор" />
-        <HeaderLink href="#" extraClass="secondary" icon={<ListIcon type="secondary" />} text="Лента заказов" />
-      </nav>
-      <a href=" /" className={styles.logo}>
-        <Logo />
-      </a>
-      <div className={styles.right}>
-        <HeaderLink href="#" extraClass="secondary" icon={<ProfileIcon type="secondary" />} text="Личный кабинет" />
+      <div className={styles.container}>
+        <nav className={styles.left}>
+          <HeaderLink href="#" icon={<BurgerIcon type="primary" />} text="Конструктор" />
+          <HeaderLink href="#" extraClass="secondary" icon={<ListIcon type="secondary" />} text="Лента заказов" />
+        </nav>
+        <a href=" /" className={styles.logo}>
+          <Logo />
+        </a>
+        <div className={styles.right}>
+          <HeaderLink href="#" extraClass="secondary" icon={<ProfileIcon type="secondary" />} text="Личный кабинет" />
+        </div>
       </div>
     </header>
   )

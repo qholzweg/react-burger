@@ -1,7 +1,11 @@
 .header {
+  background: #1C1C21;
+}
+.container {
+  max-width: calc(var(--container-width) + var(--offset-base-size) * 5 * 2);
+  margin: 0 auto;
   display: grid;
   grid-template-columns: 1fr 290px 1fr;
-  background: #1C1C21;
 }
 .left, .right,.logo {
   display: flex;

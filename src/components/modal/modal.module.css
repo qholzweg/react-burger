@@ -1,0 +1,33 @@
+.Modal {
+  position: relative;
+  min-width: 720px;
+  background-color: var(--modal-bg);
+  border-radius: var(--modal-border-radius);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  min-height: 150px;
+
+}
+.ModalHeader:not(.hasTitle) {
+  position: absolute;
+  top: 60px;
+  right: 0;
+}
+.hasTitle {
+  width: 100%;
+  box-sizing: border-box;
+  margin-top: 40px;
+  display: flex;
+  align-items: center;
+}
+.hasTitle h2 {
+  text-align: left;
+  flex-grow: 1;
+}
+.closeButton {
+  background-color: transparent;
+  border: none;
+}

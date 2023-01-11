@@ -14,11 +14,14 @@ const Order = (props) => (
 )
 
 const BurgerConstructor = (props) => {
-  const total = props.bun.price * 2 + props.filling.reduce((acc, current) => acc + current.price, 0);
+  let total  = 0; 
+  if (props.bun) total = props.bun.price * 2;
+  if (props.filling.length) total += props.filling.reduce((acc, current) => acc + current.price, 0);
   
   return (
     <>
       <ul className={`${styles.constructorSection} pt-25 pl-10`} >
+        {props.bun && 
         <li key={'topbun'} className={styles.topbun}>
           <ConstructorElement
             type="top"
@@ -27,7 +30,8 @@ const BurgerConstructor = (props) => {
             price={props.bun.price}
             thumbnail={props.bun.image_mobile}
           />
-        </li>
+        </li>}
+        {props.filling.length && 
         <li className={styles.filling} key='filling'>
           <ul>
             {props.filling.map((ingridient) => (
@@ -42,7 +46,8 @@ const BurgerConstructor = (props) => {
               </li>
             ))}
           </ul>
-        </li>
+        </li>}
+        {props.bun && 
         <li key={'bottombun'} className={styles.bottombun}>
           <ConstructorElement
             type="bottom"
@@ -51,7 +56,7 @@ const BurgerConstructor = (props) => {
             price={props.bun.price}
             thumbnail={props.bun.image_mobile}
           />
-        </li>
+        </li>}
       </ul>
       <Order total={total} />
     </>

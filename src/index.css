@@ -19,6 +19,8 @@ ul {
   --secondary: #8585AD;
   --error: #E52B1A;
   --success: ##00CCCC;
+  --modal-bg: #1C1C21;
+  --modal-border-radius: 40px;
 }
 .text-primary {color: var(--primary);}
 .text-secondary {color: var(--secondary);}

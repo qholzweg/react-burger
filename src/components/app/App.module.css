@@ -1,6 +1,14 @@
-.App main {
+main {
   max-width: var(--container-width);
   margin: 0 auto;
   display: grid;
   grid-template-columns: 1fr 1fr;
+}
+.message {
+  display: flex;
+  height: 100vh;
+  width: 100%;
+  padding: 5rem;
+  align-items: center;
+  justify-content: center;
 }

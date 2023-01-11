@@ -2,7 +2,7 @@ import { Logo, BurgerIcon, ListIcon, ProfileIcon } from '@ya.praktikum/react-dev
 import styles from './app-header.module.css';
 
 const HeaderLink = (props) => {
-  return(
+  return (
     <a href={props.href} className={`${styles.link} ${props.extraClass} text text-${props.extraClass} text_type_main-default mr-2 pl-5 pr-5 pt-4 pb-4 mt-4 mb-4`}>
       <span className="icon mr-2">{props.icon}</span>
       {props.text}

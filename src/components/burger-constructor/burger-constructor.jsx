@@ -14,8 +14,12 @@ const Order = (props) => (
 )
 
 const BurgerConstructor = (props) => {
-  const total = props.bun.price * 2 + props.filling.reduce((acc, current) => acc + current.price, 0);
-  
+
+  const bun = props.ingridients.find((el) => el.type === 'bun');
+  const filling = props.ingridients.filter((el) => el.type === 'sauce' || el.type === 'main');
+
+  const total = bun.price * 2 + filling.reduce((acc, current) => acc + current.price, 0);
+
   return (
     <>
       <ul className={`${styles.constructorSection} pt-25 pl-10`} >
@@ -23,14 +27,14 @@ const BurgerConstructor = (props) => {
           <ConstructorElement
             type="top"
             isLocked={true}
-            text={`${props.bun.name} (верх)`}
-            price={props.bun.price}
-            thumbnail={props.bun.image_mobile}
+            text={`${bun.name} (верх)`}
+            price={bun.price}
+            thumbnail={bun.image_mobile}
           />
         </li>
         <li className={styles.filling} key='filling'>
           <ul>
-            {props.filling.map((ingridient) => (
+            {filling.map((ingridient) => (
               <li key={ingridient._id}>
                 <DragIcon type="primary" />
                 <ConstructorElement
@@ -47,9 +51,9 @@ const BurgerConstructor = (props) => {
           <ConstructorElement
             type="bottom"
             isLocked={true}
-            text={`${props.bun.name} (низ)`}
-            price={props.bun.price}
-            thumbnail={props.bun.image_mobile}
+            text={`${bun.name} (низ)`}
+            price={bun.price}
+            thumbnail={bun.image_mobile}
           />
         </li>
       </ul>
@@ -58,7 +62,6 @@ const BurgerConstructor = (props) => {
   );
 }
 BurgerConstructor.propTypes = {
-  bun: ingridientsPropTypes,
-  filling: PropTypes.arrayOf(ingridientsPropTypes),
+  ingridients: PropTypes.arrayOf(ingridientsPropTypes)
 }
 export default BurgerConstructor;

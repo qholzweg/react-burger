@@ -5,41 +5,41 @@ import styles from './burger-ingredients.module.css';
 import Price from '../price/price';
 import Modal from '../modal/modal';
 import useModal from '../../hooks/use-modal';
-import React, { useState } from 'react';
-import OrderDetails from '../order-details/order-details';
+import React from 'react';
+import IngredientDetails from '../ingredient-details/ingredient-details';
 
-const Ingridient = (props) => (
-  <li key={props.ingridient._id} onClick={(e) => props.onClick(props.ingridient, e)} className={`${styles.ingridient} mr-6 mb-8`}>
-    <Counter count={1} size="small" />
-    <img src={props.ingridient.image} alt={props.ingridient.name} className={`${styles.image} ml-4 mr-4`} />
-    <Price price={props.ingridient.price} extraClass={styles.price} />
-    <p className={`${styles.name} text text_type_main-default`} >{props.ingridient.name}</p>
+const Ingridient = ({ingridient, onClick, count}) => (
+  <li key={ingridient._id} onClick={(e) => onClick(ingridient, e)} className={`${styles.ingridient} mr-6 mb-8`}>
+    {count && <Counter count={1} />}
+    <img src={ingridient.image} alt={ingridient.name} className={`${styles.image} ml-4 mr-4`} />
+    <Price price={ingridient.price} extraClass={styles.price} />
+    <p className={`${styles.name} text text_type_main-default`} >{ingridient.name}</p>
   </li>
 )
 
-const Section = (props) => (
+const IngredientsSection = ({title, collection, onIngridientClick}) => (
   <>
-    <h2 className={`${styles.sectionTitle} text text_type_main-medium mb-6`}>{props.title}</h2>
+    <h2 className={`${styles.sectionTitle} text text_type_main-medium mb-6`}>{title}</h2>
     <ul className={`${styles.ingridientsSection} mb-10`}>
-      {props.collection.map((ingridient) => (
-        <Ingridient ingridient={ingridient} key={ingridient._id} onClick={props.onIngridientClick} />
+      {collection.map((ingridient) => (
+        <Ingridient ingridient={ingridient} key={ingridient._id} count="1" onClick={onIngridientClick} />
       ))}
     </ul>
   </>
 )
 
-const BurgerIngredients = (props) => {
+const BurgerIngredients = ({ingridients}) => {
 
-  const { isOpen, open, close } = useModal(true);
+  const { isOpen: isIngredientModalOpen, open: ingredientModalOpen, close: ingredientModalClose } = useModal(false);
   const [currentIngridient, setCurrentIngridient ] = React.useState();
 
-  const buns = props.ingridients.filter((el) => el.type === 'bun');
-  const sauces = props.ingridients.filter((el) => el.type === 'sauce');
-  const mains = props.ingridients.filter((el) => el.type === 'main');
+  const buns = ingridients.filter((el) => el.type === 'bun');
+  const sauces = ingridients.filter((el) => el.type === 'sauce');
+  const mains = ingridients.filter((el) => el.type === 'main');
 
   const handleClick = (ingridient) => {
     setCurrentIngridient(ingridient);
-    open();
+    ingredientModalOpen();
   }
 
   return (
@@ -58,14 +58,14 @@ const BurgerIngredients = (props) => {
           </Tab>
         </div>
         <div className={styles.content}>
-          <Section title='Булки' collection={buns} onIngridientClick={handleClick} />
-          <Section title='Соусы' collection={sauces} onIngridientClick={handleClick} />
-          <Section title='Начинки' collection={mains} onIngridientClick={handleClick} />
+          <IngredientsSection title='Булки' collection={buns} onIngridientClick={handleClick} />
+          <IngredientsSection title='Соусы' collection={sauces} onIngridientClick={handleClick} />
+          <IngredientsSection title='Начинки' collection={mains} onIngridientClick={handleClick} />
         </div>
       </section>
-      {isOpen && currentIngridient &&
-        <Modal onClose={close} title="Детали ингредиента">
-          <OrderDetails ingridient={currentIngridient} />
+      {isIngredientModalOpen && currentIngridient &&
+        <Modal onClose={ingredientModalClose} title="Детали ингредиента">
+          <IngredientDetails ingridient={currentIngridient} />
         </Modal>}
     </>
   );

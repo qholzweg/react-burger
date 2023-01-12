@@ -1,29 +1,16 @@
 import styles from './order-details.module.css';
-import PropTypes from 'prop-types';
-import ingridientsPropTypes from '../../utils/ingridients-prop-types';
+import doneImage from '../../images/done.png'
 
-const InfoItem = (props) => (
-  <div className={styles.infoItem}>
-    <span className={styles.itemName}>{props.name}</span>
-    <span className={`${styles.itemValue} text text_type_digits-default mt-2`}>{props.value}</span>
-  </div>
-)
+const orderData = {_id: "034536"}
 
-export default function OrderDetails(props) {
-  const { name, proteins, fat, carbohydrates, calories, image_large } = props.ingridient;
+export default function OrderDetails() {
   return (
-    <div className={`${styles.OrderDetails} mb-15`}>
-      <img src={image_large} className="mb-4" />
-      <h1 className='mb-8 text text_type_main-medium'>{name}</h1>
-      <div className={`${styles.info} text text-secondary`}>
-        <InfoItem name="Калории,ккал" value={calories} />
-        <InfoItem name="Белки, г" value={proteins} />
-        <InfoItem name="Жиры, г" value={fat} />
-        <InfoItem name="Углеводы, г" value={carbohydrates} />
-      </div>
+    <div className={styles.OrderDetails}>
+      <p className={`${styles.orderId} text text_type_digits-large mb-8`}>{orderData._id}</p>
+      <p className='text text_type_main-medium'>идентификатор заказа</p>
+      <img src={doneImage} alt="Заказ принят" className='mt-15 mb-15' />
+      <p className='text text_type_main-default mb-2'>Ваш заказ начали готовить</p>
+      <p className='text text-secondary text_type_main-default'>Дождитесь готовности на орбитальной станции</p>
     </div>
   )
-}
-OrderDetails.propTypes = {
-  "ingridient": ingridientsPropTypes
 }

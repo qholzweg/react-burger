@@ -1,0 +1,15 @@
+.IngredientDetails {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.info {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 20px;
+}
+.infoItem {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+}

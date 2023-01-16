@@ -28,6 +28,7 @@
 .filling li {
   display: flex;
   align-items: center;
+  width: 100%;
 }
 .order {
   display: flex;

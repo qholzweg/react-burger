@@ -7,8 +7,8 @@ import Modal from '../modal/modal';
 import useModal from '../../hooks/use-modal';
 import OrderDetails from '../order-details/order-details';
 import { ConstructorContext } from '../../services/constructorContext';
-
-const ORDER_ENDPOINT_URL = "https://norma.nomoreparties.space/api/orders";
+import request from '../../utils/request';
+import { ORDERS_URL } from '../../utils/constants';
 
 const findIds = (content) => [content.bun, ...content.filling].map((el) => el ? el._id : null)
 
@@ -20,14 +20,13 @@ const Order = ({ total, content }) => {
 
   const handleOrderClick = () => {
     if (!disabled) {
-      fetch(ORDER_ENDPOINT_URL, {
+      request(ORDERS_URL, {
         method: "POST",
         headers: {
           'Content-Type': 'application/json;charset=utf-8'
         },
         body: JSON.stringify({ "ingredients": findIds(content) })
       })
-        .then(res => res.json())
         .then(res => {
           setState(res);
           orderModalOpen();

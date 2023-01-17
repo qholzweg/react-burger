@@ -9,7 +9,7 @@ import IngredientDetails from '../ingredient-details/ingredient-details';
 import { IngredientsContext } from '../../services/ingredientsContext';
 
 const Ingredient = ({ingredient, onClick, count}) => (
-  <li key={ingredient._id} onClick={(e) => onClick(ingredient, e)} className={`${styles.ingredient} mr-6 mb-8`}>
+  <li key={ingredient._id} onClick={() => onClick(ingredient)} className={`${styles.ingredient} mr-6 mb-8`}>
     {count && <Counter count={1} />}
     <img src={ingredient.image} alt={ingredient.name} className={`${styles.image} ml-4 mr-4`} />
     <Price price={ingredient.price} extraClass={styles.price} />

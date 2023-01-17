@@ -6,8 +6,9 @@ import BurgerIngredients from '../burger-ingredients/burger-ingredients';
 import BurgerConstructor from '../burger-constructor/burger-constructor';
 import { ConstructorContext } from '../../services/constructorContext';
 import { IngredientsContext } from '../../services/ingredientsContext';
+import request from '../../utils/request';
+import { INGREDIENTS_URL } from '../../utils/constants';
 
-const ENDPOINT_URL = 'https://norma.nomoreparties.space/api/ingredients';
 
 function findBurgerContent (ingredients) {
   const bun = ingredients.find((el) => el.type === 'bun');
@@ -30,7 +31,7 @@ function reducer(state, action) {
       content = findBurgerContent(action.ingredients);
       return { selected: content, total: countTotal(content) };
     case "delete":
-      
+
       content = {
         bun: state.selected.bun,
         filling: state.selected.filling.filter((el) => el._id !== action.id)
@@ -54,8 +55,7 @@ function App() {
   const [constructorState, dispatch] = useReducer(reducer, initialConstructorState);
 
   useEffect(() => {
-    fetch(ENDPOINT_URL)
-      .then(res => res.json())
+    request(INGREDIENTS_URL)
       .then(res => {
         const ingredients = res.data;
         setState({

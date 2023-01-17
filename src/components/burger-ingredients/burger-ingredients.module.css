@@ -21,13 +21,13 @@
 ::-webkit-scrollbar-thumb {
   background-color: #8585AD;
 }
-.ingridientsSection {
+.ingredientsSection {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 32px 24px;
   padding: 0 8px 0 16px;
 }
-.ingridient {
+.ingredient {
   position: relative;
   text-align: center;
 }

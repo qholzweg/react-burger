@@ -1,45 +1,83 @@
+import { useContext, useState } from 'react';
 import { Button, ConstructorElement, DragIcon } from '@ya.praktikum/react-developer-burger-ui-components';
-import PropTypes from 'prop-types';
-import ingridientsPropTypes from '../../utils/ingridients-prop-types';
+import { EmptyConstructorElement } from '../empty-constructor-element/empty-constructor-element';
 import styles from './burger-constructor.module.css';
 import Price from '../price/price';
 import Modal from '../modal/modal';
 import useModal from '../../hooks/use-modal';
 import OrderDetails from '../order-details/order-details';
+import { ConstructorContext } from '../../services/constructorContext';
 
-const Order = (props) => {
+const ORDER_ENDPOINT_URL = "https://norma.nomoreparties.space/api/orders";
+
+const findIds = (content) => [content.bun, ...content.filling].map((el) => el ? el._id : null)
+
+const Order = ({ total, content }) => {
   const { isOpen: isOrderModalOpen, open: orderModalOpen, close: orderModalClose } = useModal(false);
+  const initialState = { order: { number: null }, name: "", success: false, message: "" };
+  const [state, setState] = useState(initialState);
+  const disabled = content.bun ? false : true;
+
+  const handleOrderClick = () => {
+    if (!disabled) {
+      fetch(ORDER_ENDPOINT_URL, {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json;charset=utf-8'
+        },
+        body: JSON.stringify({ "ingredients": findIds(content) })
+      })
+        .then(res => res.json())
+        .then(res => {
+          setState(res);
+          orderModalOpen();
+        })
+        .catch(error => {
+          console.log(error);
+          setState({
+            success: false,
+            message: "Что-то пошло не так, попробуйте повторить позднее"
+          })
+        })
+    }
+  }
 
   return (
     <>
       <div className={`${styles.order} mt-10`}>
-        <Price price={props.total} size="medium" extraClass='mr-10' />
-        <Button onClick={orderModalOpen} htmlType="button" type="primary" size="medium">
+        <Price price={total} size="medium" extraClass='mr-10' />
+        <Button onClick={handleOrderClick} htmlType="button" type="primary" size="medium" disabled={disabled}>
           Оформить заказ
         </Button>
       </div>
       {isOrderModalOpen &&
         <Modal onClose={orderModalClose} >
-          <OrderDetails />
+          {!state.success &&
+            <p className='text text_type-main_default text-error'>{state.message}</p>
+          }
+          {state.success &&
+            <OrderDetails order={state.order} />
+          }
         </Modal>}
     </>
   )
 }
 
-const BurgerConstructor = ({ingridients}) => {
+const BurgerConstructor = () => {
 
-  const bun = ingridients.find((el) => el.type === 'bun');
-  const filling = ingridients.filter((el) => el.type === 'sauce' || el.type === 'main');
+  const [constructorState, dispatch] = useContext(ConstructorContext);
 
-  let total = 0;
-  if (bun) total = bun.price * 2;
-  if (filling.length) total += filling.reduce((acc, current) => acc + current.price, 0);
+  const { selected: { bun, filling }, total } = constructorState;
+
+  const handleDelete = (id) => {
+    dispatch({ type: "delete", id: id })
+  }
 
   return (
     <>
       <ul className={`${styles.constructorSection} pt-25 pl-10`} >
-        {bun &&
-          <li key={'topbun'} className={styles.topbun}>
+        <li key={'topbun'} className={styles.topbun}>
+          {bun &&
             <ConstructorElement
               type="top"
               isLocked={true}
@@ -47,8 +85,14 @@ const BurgerConstructor = ({ingridients}) => {
               price={bun.price}
               thumbnail={bun.image_mobile}
             />
-          </li>}
-        {filling.length &&
+          }
+          {!bun &&
+            <EmptyConstructorElement
+              type="top-bun"
+            />
+          }
+        </li>
+        {filling && filling.length > 0 &&
           <li className={styles.filling} key='filling'>
             <ul>
               {filling.map((ingridient) => (
@@ -59,13 +103,22 @@ const BurgerConstructor = ({ingridients}) => {
                     price={ingridient.price}
                     thumbnail={ingridient.image_mobile}
                     extraClass="ml-9"
+                    handleClose={() => handleDelete(ingridient._id)}
                   />
                 </li>
               ))}
             </ul>
-          </li>}
-        {bun &&
-          <li key={'bottombun'} className={styles.bottombun}>
+          </li>
+        }
+        {(!filling || filling.length === 0) &&
+          <li className={styles.emptyFilling} key='filling'>
+            <EmptyConstructorElement
+              type="filling"
+            />
+          </li>
+        }
+        <li key={'bottombun'} className={styles.bottombun}>
+          {bun &&
             <ConstructorElement
               type="bottom"
               isLocked={true}
@@ -73,13 +126,17 @@ const BurgerConstructor = ({ingridients}) => {
               price={bun.price}
               thumbnail={bun.image_mobile}
             />
-          </li>}
+          }
+          {!bun &&
+            <EmptyConstructorElement
+              type="bottom-bun"
+            />
+          }
+        </li>
       </ul>
-      <Order total={total} />
+      <Order content={{ bun, filling }} total={total} />
     </>
   );
 }
-BurgerConstructor.propTypes = {
-  ingridients: PropTypes.arrayOf(ingridientsPropTypes)
-}
+
 export default BurgerConstructor;

@@ -1,0 +1,9 @@
+.EmptyConstructorElement {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.EmptyConstructorElement span {
+  display: block;
+  text-align: center;
+}

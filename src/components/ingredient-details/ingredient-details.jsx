@@ -8,7 +8,7 @@ const InfoItem = ({ name, value }) => (
   </div>
 )
 
-export default function IngredientDetails({ ingridient: { name, proteins, fat, carbohydrates, calories, image_large } }) {
+export default function IngredientDetails({ ingredient: { name, proteins, fat, carbohydrates, calories, image_large } }) {
 
   return (
     <div className={styles.IngredientDetails}>
@@ -24,5 +24,5 @@ export default function IngredientDetails({ ingridient: { name, proteins, fat, c
   )
 }
 IngredientDetails.propTypes = {
-  "ingridient": ingridientsPropTypes
+  ingridient: ingridientsPropTypes
 }

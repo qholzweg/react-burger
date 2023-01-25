@@ -1,30 +1,71 @@
 import { InfoIcon } from '@ya.praktikum/react-developer-burger-ui-components';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useReducer } from 'react';
 import styles from './App.module.css';
 import AppHeader from '../app-header/app-header';
 import BurgerIngredients from '../burger-ingredients/burger-ingredients';
 import BurgerConstructor from '../burger-constructor/burger-constructor';
+import { ConstructorContext } from '../../services/constructorContext';
+import { IngredientsContext } from '../../services/ingredientsContext';
+import request from '../../utils/request';
+import { INGREDIENTS_URL } from '../../utils/constants';
 
-const ENDPOINT_URL = 'https://norma.nomoreparties.space/api/ingredients';
+
+function findBurgerContent (ingredients) {
+  const bun = ingredients.find((el) => el.type === 'bun');
+  const filling = ingredients.filter((el) => el.type !== 'bun');
+  return {bun, filling};
+}
+
+function countTotal(content) {
+  let total = 0;
+  const {bun, filling} = content;
+  if (bun) total = bun.price * 2;
+  if (filling && filling.length) total += filling.reduce((acc, current) => acc + current.price, 0);
+  return total;
+}
+
+function reducer(state, action) {
+  let content;
+  switch (action.type) {
+    case "init":
+      content = findBurgerContent(action.ingredients);
+      return { selected: content, total: countTotal(content) };
+    case "delete":
+
+      content = {
+        bun: state.selected.bun,
+        filling: state.selected.filling.filter((el) => el._id !== action.id)
+      };
+      return {
+        selected: content, 
+        total: countTotal(content) };
+    default:
+      throw new Error(`Wrong type of action: ${action.type}`);
+  }
+}
 
 function App() {
 
   const [state, setState] = useState({
-    ingridients: [],
-    bun: null,
-    filling: [],
+    ingredients: [],
     isLoading: true,
     hasError: false
-  })
+  });
+  const initialConstructorState= { selected: [], total:0 };
+  const [constructorState, dispatch] = useReducer(reducer, initialConstructorState);
+
   useEffect(() => {
-    fetch(ENDPOINT_URL)
-      .then(res => res.json())
+    request(INGREDIENTS_URL)
       .then(res => {
-        const data = res.data;
+        const ingredients = res.data;
         setState({
-          ingridients: data,
+          ingredients: ingredients,
           isLoading: false,
           hasError: false
+        });
+        dispatch({
+          type: "init",
+          ingredients: ingredients
         })
       })
       .catch(error => {
@@ -49,17 +90,21 @@ function App() {
         </div>
       }
 
-      {state.ingridients && !state.isLoading && !state.hasError &&
+      {state.ingredients && !state.isLoading && !state.hasError &&
         <>
           <AppHeader />
-          <main className='pl-5 pr-5'>
-            <section className={styles.ingridientsBlock}>
-              <BurgerIngredients ingridients={state.ingridients} />
-            </section>
-            <section className={styles.constructorBlock}>
-              <BurgerConstructor ingridients={state.ingridients} />
-            </section>
-          </main>
+          <IngredientsContext.Provider value={[state, setState]}>
+            <main className='pl-5 pr-5'>
+              <section className={styles.ingridientsBlock}>
+                <BurgerIngredients />
+              </section>
+              <section className={styles.constructorBlock}>
+                <ConstructorContext.Provider value={[constructorState, dispatch]}>
+                  <BurgerConstructor />
+                </ConstructorContext.Provider>
+              </section>
+            </main>
+          </IngredientsContext.Provider>
         </>
       }
     </div>

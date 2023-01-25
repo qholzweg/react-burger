@@ -1,44 +1,47 @@
+import {useContext} from 'react';
 import { Counter, Tab } from '@ya.praktikum/react-developer-burger-ui-components';
-import PropTypes from 'prop-types';
-import ingridientsPropTypes from '../../utils/ingridients-prop-types';
 import styles from './burger-ingredients.module.css';
 import Price from '../price/price';
 import Modal from '../modal/modal';
 import useModal from '../../hooks/use-modal';
 import React from 'react';
 import IngredientDetails from '../ingredient-details/ingredient-details';
+import { IngredientsContext } from '../../services/ingredientsContext';
 
-const Ingridient = ({ingridient, onClick, count}) => (
-  <li key={ingridient._id} onClick={(e) => onClick(ingridient, e)} className={`${styles.ingridient} mr-6 mb-8`}>
+const Ingredient = ({ingredient, onClick, count}) => (
+  <li key={ingredient._id} onClick={() => onClick(ingredient)} className={`${styles.ingredient} mr-6 mb-8`}>
     {count && <Counter count={1} />}
-    <img src={ingridient.image} alt={ingridient.name} className={`${styles.image} ml-4 mr-4`} />
-    <Price price={ingridient.price} extraClass={styles.price} />
-    <p className={`${styles.name} text text_type_main-default`} >{ingridient.name}</p>
+    <img src={ingredient.image} alt={ingredient.name} className={`${styles.image} ml-4 mr-4`} />
+    <Price price={ingredient.price} extraClass={styles.price} />
+    <p className={`${styles.name} text text_type_main-default`} >{ingredient.name}</p>
   </li>
 )
 
-const IngredientsSection = ({title, collection, onIngridientClick}) => (
+const IngredientsSection = ({title, collection, onIngredientClick}) => (
   <>
     <h2 className={`${styles.sectionTitle} text text_type_main-medium mb-6`}>{title}</h2>
-    <ul className={`${styles.ingridientsSection} mb-10`}>
-      {collection.map((ingridient) => (
-        <Ingridient ingridient={ingridient} key={ingridient._id} count="1" onClick={onIngridientClick} />
+    <ul className={`${styles.ingredientsSection} mb-10`}>
+      {collection.map((ingredient) => (
+        <Ingredient ingredient={ingredient} key={ingredient._id} count="1" onClick={onIngredientClick} />
       ))}
     </ul>
   </>
 )
 
-const BurgerIngredients = ({ingridients}) => {
-
+const BurgerIngredients = () => {
+  const [state] = useContext(IngredientsContext);
   const { isOpen: isIngredientModalOpen, open: ingredientModalOpen, close: ingredientModalClose } = useModal(false);
-  const [currentIngridient, setCurrentIngridient ] = React.useState();
+  const [currentIngredient, setCurrentIngredient ] = React.useState();
 
-  const buns = ingridients.filter((el) => el.type === 'bun');
-  const sauces = ingridients.filter((el) => el.type === 'sauce');
-  const mains = ingridients.filter((el) => el.type === 'main');
+  if (!state.ingredients && !state.ingredients.length) return;
+  const ingredients = state.ingredients;
 
-  const handleClick = (ingridient) => {
-    setCurrentIngridient(ingridient);
+  const buns = ingredients.filter((el) => el.type === 'bun');
+  const sauces = ingredients.filter((el) => el.type === 'sauce');
+  const mains = ingredients.filter((el) => el.type === 'main');
+
+  const handleClick = (ingredient) => {
+    setCurrentIngredient(ingredient);
     ingredientModalOpen();
   }
 
@@ -58,20 +61,17 @@ const BurgerIngredients = ({ingridients}) => {
           </Tab>
         </div>
         <div className={styles.content}>
-          <IngredientsSection title='Булки' collection={buns} onIngridientClick={handleClick} />
-          <IngredientsSection title='Соусы' collection={sauces} onIngridientClick={handleClick} />
-          <IngredientsSection title='Начинки' collection={mains} onIngridientClick={handleClick} />
+          <IngredientsSection title='Булки' collection={buns} onIngredientClick={handleClick} />
+          <IngredientsSection title='Соусы' collection={sauces} onIngredientClick={handleClick} />
+          <IngredientsSection title='Начинки' collection={mains} onIngredientClick={handleClick} />
         </div>
       </section>
-      {isIngredientModalOpen && currentIngridient &&
+      {isIngredientModalOpen && currentIngredient &&
         <Modal onClose={ingredientModalClose} title="Детали ингредиента">
-          <IngredientDetails ingridient={currentIngridient} />
+          <IngredientDetails ingredient={currentIngredient} />
         </Modal>}
     </>
   );
 }
 
-BurgerIngredients.propTypes = {
-  ingridients: PropTypes.arrayOf(ingridientsPropTypes)
-}
 export default BurgerIngredients;

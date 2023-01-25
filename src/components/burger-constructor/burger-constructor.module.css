@@ -6,7 +6,7 @@
   max-height: calc(100vh - 326px);
   margin: 0 0 40px 0;
 }
-.topbun, .bottombun {
+.topbun, .bottombun, .emptyFilling {
   margin-left: 58px;
   display: flex;
   justify-content: flex-end;

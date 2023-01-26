@@ -1,4 +1,4 @@
-import { getOrder, ORDER_CLOSE, ORDER_OPEN } from '../../../services/actions/burger';
+import { getOrder, ORDER_CLOSE, ORDER_OPEN } from '../../../services/actions/order';
 import { useSelector, useDispatch } from 'react-redux';
 import { Button } from '@ya.praktikum/react-developer-burger-ui-components';
 
@@ -6,14 +6,15 @@ import styles from './order.module.css';
 import Price from '../../price/price';
 import Modal from '../../modal/modal';
 import OrderDetails from '../order-details/order-details';
+import { selectBurger, selectOrder } from '../../../services/reducers/selectors';
 
 const findIds = (content) => [content.bun, ...content.filling].map((el) => el ? el._id : null)
 
 export default function Order() {
   const dispatch = useDispatch();
-  const { selected, total } = useSelector(store => store.burger);
+  const { selected, total } = useSelector(selectBurger);
   const disabled = selected.bun ? false : true;
-  const { orderRequest, orderFailed, isOrderModalOpen } = useSelector(state => state.order);
+  const { orderRequest, orderFailed, isOrderModalOpen } = useSelector(selectOrder);
 
   const handleOrderOpen = () => {
     if (!disabled) {

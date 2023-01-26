@@ -1,9 +1,10 @@
 import styles from './order-details.module.css';
 import doneImage from '../../../images/done.png';
 import { useSelector } from 'react-redux';
+import { selectOrder } from '../../../services/reducers/selectors';
 
 export default function OrderDetails() {
-  const { order } = useSelector(state => state.order.order);
+  const { order } = useSelector(selectOrder);
   return (
     <div className={styles.OrderDetails}>
       {order.number && <>

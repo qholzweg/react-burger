@@ -5,8 +5,10 @@ import Price from '../price/price';
 import Modal from '../modal/modal';
 import IngredientDetails from './ingredient-details/ingredient-details';
 import { useSelector, useDispatch } from 'react-redux';
-import { DELETE_CURRENT_INGREDIENT, SET_CURRENT_TAB, getIngredients, openDetails, DETAILS_CLOSE } from '../../services/actions/burger';
+import { SET_CURRENT_TAB, getIngredients } from '../../services/actions/ingredients';
+import {  DELETE_CURRENT_INGREDIENT, openDetails, DETAILS_CLOSE } from '../../services/actions/details';
 import { useDrag } from 'react-dnd';
+import { selectIngredients, selectDetails } from '../../services/reducers/selectors';
 
 const Ingredient = ({ ingredient, count }) => {
   const dispatch = useDispatch();
@@ -48,8 +50,8 @@ const IngredientsSection = React.forwardRef(({ title, sectionName, collection, o
 );
 
 const BurgerIngredients = () => {
-  const { all, ingredientsRequest, ingredientsFailed, currentTab } = useSelector(state => state.ingredients);
-  const { isDetailsModalOpen, currentIngredient } = useSelector(state => state.details);
+  const { all, ingredientsRequest, ingredientsFailed, currentTab } = useSelector(selectIngredients);
+  const { isDetailsModalOpen, currentIngredient } = useSelector(selectDetails);
   const dispatch = useDispatch();
 
   const sectionRef = useRef();

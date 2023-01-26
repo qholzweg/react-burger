@@ -9,11 +9,12 @@ import uuid from 'react-uuid';
 import styles from './burger-constructor.module.css';
 import FillingItem from './filling-item'
 import Order from './order/order';
+import { selectBurger } from '../../services/reducers/selectors';
 
 const BurgerConstructor = () => {
   const dispatch = useDispatch();
 
-  const { selected: { bun, filling } } = useSelector(store => store.burger);
+  const { selected: { bun, filling } } = useSelector(selectBurger);
 
   const [{ isHover }, dropTarget] = useDrop({
     accept: 'ingredient',

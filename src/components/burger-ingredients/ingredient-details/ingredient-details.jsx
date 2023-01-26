@@ -1,5 +1,5 @@
 import styles from './ingredient-details.module.css';
-import ingridientsPropTypes from '../../utils/ingridients-prop-types';
+import ingredientsPropTypes from '../../../utils/ingredients-prop-types';
 
 const InfoItem = ({ name, value }) => (
   <div className={styles.infoItem}>
@@ -23,6 +23,6 @@ export default function IngredientDetails({ ingredient: { name, proteins, fat, c
     </div>
   )
 }
-IngredientDetails.propTypes = {
-  ingridient: ingridientsPropTypes
+ IngredientDetails.propTypes = {
+  ingredient: ingredientsPropTypes
 }

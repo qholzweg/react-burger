@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import { selectOrder } from '../../../services/reducers/selectors';
 
 export default function OrderDetails() {
-  const { order } = useSelector(selectOrder);
+  const { order:{order} } = useSelector(selectOrder);
   return (
     <div className={styles.OrderDetails}>
       {order.number && <>

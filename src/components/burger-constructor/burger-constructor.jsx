@@ -1,80 +1,40 @@
-import { useContext, useState } from 'react';
-import { Button, ConstructorElement, DragIcon } from '@ya.praktikum/react-developer-burger-ui-components';
-import { EmptyConstructorElement } from '../empty-constructor-element/empty-constructor-element';
+import { useMemo } from 'react';
+import { ConstructorElement } from '@ya.praktikum/react-developer-burger-ui-components';
+import { EmptyConstructorElement } from './empty-constructor-element/empty-constructor-element';
+import { useSelector, useDispatch } from 'react-redux';
+import { addSelectedItem } from '../../services/actions/burger';
+import { useDrop } from 'react-dnd';
+import uuid from 'react-uuid';
+
 import styles from './burger-constructor.module.css';
-import Price from '../price/price';
-import Modal from '../modal/modal';
-import useModal from '../../hooks/use-modal';
-import OrderDetails from '../order-details/order-details';
-import { ConstructorContext } from '../../services/constructorContext';
-import request from '../../utils/request';
-import { ORDERS_URL } from '../../utils/constants';
-
-const findIds = (content) => [content.bun, ...content.filling].map((el) => el ? el._id : null)
-
-const Order = ({ total, content }) => {
-  const { isOpen: isOrderModalOpen, open: orderModalOpen, close: orderModalClose } = useModal(false);
-  const initialState = { order: { number: null }, name: "", success: false, message: "" };
-  const [state, setState] = useState(initialState);
-  const disabled = content.bun ? false : true;
-
-  const handleOrderClick = () => {
-    if (!disabled) {
-      request(ORDERS_URL, {
-        method: "POST",
-        headers: {
-          'Content-Type': 'application/json;charset=utf-8'
-        },
-        body: JSON.stringify({ "ingredients": findIds(content) })
-      })
-        .then(res => {
-          setState(res);
-          orderModalOpen();
-        })
-        .catch(error => {
-          console.log(error);
-          setState({
-            success: false,
-            message: "Что-то пошло не так, попробуйте повторить позднее"
-          })
-        })
-    }
-  }
-
-  return (
-    <>
-      <div className={`${styles.order} mt-10`}>
-        <Price price={total} size="medium" extraClass='mr-10' />
-        <Button onClick={handleOrderClick} htmlType="button" type="primary" size="medium" disabled={disabled}>
-          Оформить заказ
-        </Button>
-      </div>
-      {isOrderModalOpen &&
-        <Modal onClose={orderModalClose} >
-          {!state.success &&
-            <p className='text text_type-main_default text-error'>{state.message}</p>
-          }
-          {state.success &&
-            <OrderDetails order={state.order} />
-          }
-        </Modal>}
-    </>
-  )
-}
+import FillingItem from './filling-item'
+import Order from './order/order';
+import { selectBurger } from '../../services/reducers/selectors';
 
 const BurgerConstructor = () => {
+  const dispatch = useDispatch();
 
-  const [constructorState, dispatch] = useContext(ConstructorContext);
+  const { selected: { bun, filling } } = useSelector(selectBurger);
 
-  const { selected: { bun, filling }, total } = constructorState;
+  const [{ isHover }, dropTarget] = useDrop({
+    accept: 'ingredient',
+    drop(itemId) {
+      dispatch(addSelectedItem(itemId));
+    },
+    collect: monitor => ({
+      isHover: monitor.isOver()
+    })
+  });
 
-  const handleDelete = (id) => {
-    dispatch({ type: "delete", id: id })
-  }
+  const fillingContents = useMemo(
+    () => filling.map((ingredient, index) => (
+      <FillingItem key={uuid()} ingredient={ingredient} index={index} />
+    )), [filling]
+  )
 
   return (
-    <>
-      <ul className={`${styles.constructorSection} pt-25 pl-10`} >
+    <section className='pt-25 pl-10'>
+      <ul ref={dropTarget} className={`${styles.constructorSection} ${isHover ? styles.isHover : ''}`} >
         <li key={'topbun'} className={styles.topbun}>
           {bun &&
             <ConstructorElement
@@ -94,18 +54,7 @@ const BurgerConstructor = () => {
         {filling && filling.length > 0 &&
           <li className={styles.filling} key='filling'>
             <ul>
-              {filling.map((ingridient) => (
-                <li key={ingridient._id}>
-                  <DragIcon type="primary" />
-                  <ConstructorElement
-                    text={ingridient.name}
-                    price={ingridient.price}
-                    thumbnail={ingridient.image_mobile}
-                    extraClass="ml-9"
-                    handleClose={() => handleDelete(ingridient._id)}
-                  />
-                </li>
-              ))}
+              {fillingContents}
             </ul>
           </li>
         }
@@ -133,8 +82,8 @@ const BurgerConstructor = () => {
           }
         </li>
       </ul>
-      <Order content={{ bun, filling }} total={total} />
-    </>
+      <Order />
+    </section>
   );
 }
 

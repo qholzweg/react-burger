@@ -11,7 +11,7 @@
 .content {
   flex-grow: 1;
   overflow-y: auto;
-  
+  position: relative;
 }
 ::-webkit-scrollbar {
   width: 8px;
@@ -30,8 +30,17 @@
 .ingredient {
   position: relative;
   text-align: center;
+  cursor: pointer;
 }
 .price {
   margin: 4px auto;
+  justify-content: center;
+}
+.message {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  padding: 5rem;
+  align-items: center;
   justify-content: center;
 }

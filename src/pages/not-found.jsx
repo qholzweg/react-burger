@@ -8,7 +8,7 @@ import styles from './not-found.module.css';
 export function NotFound404() {
 
   return (
-    <div className={styles.wrapper}>
+    <main className='content-center text-center'>
       <div className={styles.container}>
         {/* <Breadcrumbs /> */}
         <div className={styles.content}>
@@ -19,6 +19,6 @@ export function NotFound404() {
           <p>check the address or try <Link to='/' className={styles.link}>homepage</Link></p>
         </div>
       </div>
-    </div>
+    </main>
   );
 }

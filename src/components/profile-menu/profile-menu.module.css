@@ -1,0 +1,16 @@
+.menu {
+  margin-bottom: 80px;
+}
+
+.menu li {
+  padding: 17px;
+}
+
+.menu li a {
+  text-decoration: none;
+  color: #8585AD;
+}
+
+.menu li a:global.active {
+  color: #fff;
+}

@@ -1,14 +1,14 @@
-import styles from './App.module.css';
-import AppHeader from '../app-header/app-header';
-import BurgerIngredients from '../burger-ingredients/burger-ingredients';
-import BurgerConstructor from '../burger-constructor/burger-constructor';
+import styles from './home.module.css';
+import AppHeader from '../components/app-header/app-header';
+import BurgerIngredients from '../components/burger-ingredients/burger-ingredients';
+import BurgerConstructor from '../components/burger-constructor/burger-constructor';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { DndProvider } from 'react-dnd';
 
 
-function App() {
+export default function HomePage() {
   return (
-    <div className={styles.App}>
+    <div className={styles.HomePage}>
       <AppHeader />
       <main className='pl-5 pr-5'>
         <DndProvider backend={HTML5Backend}>
@@ -24,4 +24,3 @@ function App() {
   );
 }
 
-export default App;

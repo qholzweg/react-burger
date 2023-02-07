@@ -8,7 +8,6 @@ export const auth = {
     setCookie('refreshToken', refreshToken);
   },
   deleteUser: () => {
-    console.log('d');
     deleteCookie('accessToken');
     deleteCookie('refreshToken');
   },

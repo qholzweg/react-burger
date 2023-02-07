@@ -22,7 +22,7 @@ function isResJson(res) {
 
 async function handleExpired(args) {
   return await auth.refresh()
-  .then(() => {console.log(...args);return handleRequest(...args)})
+  .then(() => handleRequest(...args))
   .catch(() => auth.logout().then(() => new Error("Пожалуйста, войдите в систему снова")))
 }
 

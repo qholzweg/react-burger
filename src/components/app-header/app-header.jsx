@@ -5,7 +5,7 @@ import styles from './app-header.module.css';
 const HeaderLink = (props) => {
   const classes = `${styles.link} ${props.extraClass} text text_type_main-default mr-2 pl-5 pr-5 pt-4 pb-4 mt-4 mb-4`;
   return (
-    <NavLink to={props.to} className={classes} >
+    <NavLink to={props.to} className={classes} end >
       <span className="icon mr-2">{props.icon}</span>
       {props.text}
     </NavLink>
@@ -22,7 +22,7 @@ const AppHeader = () => {
       <div className={styles.container}>
         <nav className={styles.left}>
           <HeaderLink to="/" icon={<BurgerIcon />} text="Конструктор" />
-          <HeaderLink to="/orders" extraClass="secondary" icon={<ListIcon type="secondary" />} text="Лента заказов" />
+          <HeaderLink to="/profile/orders" extraClass="secondary" icon={<ListIcon type="secondary" />} text="Лента заказов" />
         </nav>
         <Link to="/" className={styles.logo}>
           <Logo />

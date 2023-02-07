@@ -11,3 +11,9 @@ export function openDetails({ id }) {
     dispatch({ type: DETAILS_OPEN });
   }
 }
+export function closeDetails() {
+  return function (dispatch) {
+    dispatch({ type: DELETE_CURRENT_INGREDIENT });
+    dispatch({ type: DETAILS_CLOSE });
+  }
+}

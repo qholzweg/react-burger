@@ -1,18 +1,24 @@
 .header {
   background: #1C1C21;
 }
+
 .container {
   max-width: calc(var(--container-width) + var(--offset-base-size) * 5 * 2);
   margin: 0 auto;
   display: grid;
   grid-template-columns: 1fr 290px 1fr;
 }
-.left, .right,.logo {
+
+.left,
+.right,
+.logo {
   display: flex;
 }
+
 .logo {
   align-items: center;
 }
+
 .right {
   justify-self: flex-end;
 }
@@ -22,4 +28,17 @@
   align-items: center;
   text-decoration: none;
   height: 22px;
+  color: #8585AD;
+}
+
+.link:global.active {
+  color: white;
+}
+
+.link>:global.icon svg {
+  fill: #8585AD !important;
+}
+
+.link:global.active>:global.icon svg {
+  fill: #fff !important;
 }

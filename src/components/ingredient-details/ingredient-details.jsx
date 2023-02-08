@@ -1,5 +1,5 @@
 import styles from './ingredient-details.module.css';
-import ingredientsPropTypes from '../../../utils/ingredients-prop-types';
+import ingredientsPropTypes from '../../utils/ingredients-prop-types';
 
 const InfoItem = ({ name, value }) => (
   <div className={styles.infoItem}>

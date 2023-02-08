@@ -11,7 +11,7 @@ export const SET_INGREDIENT_COUNT_BY_TYPE = 'SET_INGREDIENT_COUNT_BY_TYPE';
 export const SET_CURRENT_TAB = 'SET_CURRENT_TAB';
 export const DROP_INGRIDIENTS_STATE = 'DROP_INGRIDIENTS_STATE';
 
-export function getIngredients() {
+export function getIngredients(onSuccess) {
   return function (dispatch) {
     dispatch({
       type: GET_INGREDIENTS_REQUEST
@@ -22,6 +22,7 @@ export function getIngredients() {
           type: GET_INGREDIENTS_SUCCESS,
           ingredients: res.data
         });
+        if (typeof onSuccess === 'function') onSuccess();
       })
       .catch(error => {
         console.log(error);

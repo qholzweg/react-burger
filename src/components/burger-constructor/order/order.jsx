@@ -7,15 +7,17 @@ import Price from '../../price/price';
 import Modal from '../../modal/modal';
 import OrderDetails from '../order-details/order-details';
 import { selectBurger, selectOrder } from '../../../services/reducers/selectors';
+import { auth } from '../../../services/api';
 
 const findIds = (content) => [content.bun, ...content.filling].map((el) => el ? el._id : null)
 
 export default function Order() {
   const dispatch = useDispatch();
   const { selected, total } = useSelector(selectBurger);
-  const disabled = selected.bun ? false : true;
   const { orderRequest, orderFailed, isOrderModalOpen } = useSelector(selectOrder);
-
+  const isLoggedIn = auth.isLoggedIn();
+  const disabled = selected.bun && isLoggedIn ? false : true;
+  
   const handleOrderOpen = () => {
     if (!disabled) {
       dispatch(getOrder(findIds(selected)));

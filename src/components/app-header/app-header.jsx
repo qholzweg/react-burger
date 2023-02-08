@@ -22,7 +22,7 @@ const AppHeader = () => {
       <div className={styles.container}>
         <nav className={styles.left}>
           <HeaderLink to="/" icon={<BurgerIcon />} text="Конструктор" />
-          <HeaderLink to="/history" extraClass="secondary" icon={<ListIcon type="secondary" />} text="Лента заказов" />
+          <HeaderLink to="/feed" extraClass="secondary" icon={<ListIcon type="secondary" />} text="Лента заказов" />
         </nav>
         <Link to="/" className={styles.logo}>
           <Logo />

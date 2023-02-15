@@ -1,13 +1,12 @@
-import { getOrder, ORDER_CLOSE, ORDER_OPEN } from '../../../services/actions/order';
 import { useSelector, useDispatch } from 'react-redux';
 import { Button } from '@ya.praktikum/react-developer-burger-ui-components';
-
 import styles from './order.module.css';
 import Price from '../../price/price';
 import Modal from '../../modal/modal';
 import OrderDetails from '../order-details/order-details';
 import { selectBurger, selectOrder } from '../../../services/reducers/selectors';
 import { auth } from '../../../services/api';
+import { getOrder, orderClose } from '../../../services/reducers/order-slice';
 
 const findIds = (content) => [content.bun, ...content.filling].map((el) => el ? el._id : null)
 
@@ -21,11 +20,10 @@ export default function Order() {
   const handleOrderOpen = () => {
     if (!disabled) {
       dispatch(getOrder(findIds(selected)));
-      dispatch({type: ORDER_OPEN});
     }
   }
   const handleOrderClose = () => {
-    dispatch({type: ORDER_CLOSE});
+    dispatch(orderClose());
   }
 
   return (

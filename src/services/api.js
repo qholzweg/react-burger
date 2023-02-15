@@ -1,6 +1,14 @@
-import { LOGIN_URL, LOGOUT_URL, PASSWORD_RESET_URL, PASSWORD_RESTORE_URL, REGISTER_URL, RENEW_TOKEN_URL, USER_URL } from "../utils/constants";
+import { INGREDIENTS_URL, LOGIN_URL, LOGOUT_URL, ORDERS_URL, PASSWORD_RESET_URL, PASSWORD_RESTORE_URL, REGISTER_URL, RENEW_TOKEN_URL, USER_URL } from "../utils/constants";
 import { handleRequest } from "../utils/request";
 import { setCookie, deleteCookie, getCookie } from "./utils";
+
+export const ingredients = {
+  get: () => handleRequest(INGREDIENTS_URL, 'GET', null)
+}
+
+export const order = {
+  get: (ids) => handleRequest(ORDERS_URL, 'POST', { "ingredients": ids })
+}
 
 export const auth = {
   addUser(accessToken, refreshToken) {
@@ -18,7 +26,6 @@ export const auth = {
     }),
   logout: () => handleRequest(LOGOUT_URL, 'POST', { 'token': getCookie('refreshToken') })
     .then(() => {
-      console.log(auth.isLoggedIn());
       if (auth.isLoggedIn()) auth.deleteUser();
     }),
   getUser: () => handleRequest(USER_URL, 'GET', null, true),

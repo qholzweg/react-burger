@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { ConstructorElement } from '@ya.praktikum/react-developer-burger-ui-components';
 import { EmptyConstructorElement } from './empty-constructor-element/empty-constructor-element';
 import { useSelector, useDispatch } from 'react-redux';
-import { addSelectedItem } from '../../services/actions/burger';
+import { addSelectedItemById } from '../../services/reducers/burger-slice';
 import { useDrop } from 'react-dnd';
 import uuid from 'react-uuid';
 
@@ -19,7 +19,7 @@ const BurgerConstructor = () => {
   const [{ isHover }, dropTarget] = useDrop({
     accept: 'ingredient',
     drop(itemId) {
-      dispatch(addSelectedItem(itemId));
+      dispatch(addSelectedItemById(itemId));
     },
     collect: monitor => ({
       isHover: monitor.isOver()

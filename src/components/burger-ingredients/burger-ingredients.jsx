@@ -5,8 +5,8 @@ import Price from '../price/price';
 import Modal from '../modal/modal';
 import IngredientDetails from '../ingredient-details/ingredient-details';
 import { useSelector, useDispatch } from 'react-redux';
-import { SET_CURRENT_TAB, getIngredients } from '../../services/actions/ingredients';
-import { openDetails, closeDetails } from '../../services/actions/details';
+import { getIngredients, setCurrentTab } from '../../services/reducers/ingredients-slice';
+import { detailsOpen, detailsClose } from '../../services/reducers/details-slice';
 import { useDrag } from 'react-dnd';
 import { selectIngredients, selectDetails } from '../../services/reducers/selectors';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
@@ -24,7 +24,7 @@ const Ingredient = ({ ingredient, count }) => {
   });
 
   const handleDetailsOpen = () => {
-    dispatch(openDetails({ id: ingredient._id }));
+    dispatch(detailsOpen(ingredient._id));
     navigate('/ingredients/' + ingredient._id, { state: { keepDetailsModal: true } });
   }
 
@@ -71,9 +71,7 @@ const BurgerIngredients = () => {
   useEffect(
     () => {
       id && locationState?.keepDetailsModal ?
-        dispatch(getIngredients(
-          () => dispatch(openDetails({ id: id })))
-        ) :
+        dispatch(getIngredients({id})) :
         dispatch(getIngredients());
     }, [dispatch, id, locationState]
   );
@@ -81,15 +79,15 @@ const BurgerIngredients = () => {
   const activateTab = (scrollTop) => {
     const boundary = 20;
     if (Math.abs(bunRef.current.offsetTop - scrollTop) <= boundary) {
-      dispatch({ type: SET_CURRENT_TAB, tab: 'buns' });
+      dispatch(setCurrentTab('buns'));
     } else if (Math.abs(sauceRef.current.offsetTop - scrollTop) <= boundary) {
-      dispatch({ type: SET_CURRENT_TAB, tab: 'sauces' })
+      dispatch(setCurrentTab('sauces'));
     } else if (Math.abs(mainRef.current.offsetTop - scrollTop) <= boundary) {
-      dispatch({ type: SET_CURRENT_TAB, tab: 'main' })
+      dispatch(setCurrentTab('main'));
     }
   }
 
-  const setCurrentTab = (tab) => {
+  const scrollToCurrentTab = (tab) => {
     document.getElementById(tab).scrollIntoView({ behavior: 'smooth' });
   }
 
@@ -102,7 +100,7 @@ const BurgerIngredients = () => {
   const mains = all.length ? all.filter((el) => el.type === 'main') : [];
 
   const handleDetailsClose = () => {
-    dispatch(closeDetails());
+    dispatch(detailsClose());
     navigate('/', { state: { keepDetailsModal: false } });
   }
 
@@ -122,13 +120,13 @@ const BurgerIngredients = () => {
         <section className={`${styles.mainSection} pt-10 pb-10`} ref={sectionRef}>
           <h1 className={`${styles.title} text text_type_main-large mb-5`}>Соберите бургер</h1>
           <div className={`${styles.tabs} mb-10`}>
-            <Tab value="buns" active={currentTab === 'buns'} onClick={setCurrentTab} >
+            <Tab value="buns" active={currentTab === 'buns'} onClick={scrollToCurrentTab} >
               Булки
             </Tab>
-            <Tab value="sauces" active={currentTab === 'sauces'} onClick={setCurrentTab} >
+            <Tab value="sauces" active={currentTab === 'sauces'} onClick={scrollToCurrentTab} >
               Соусы
             </Tab>
-            <Tab value="main" active={currentTab === 'main'} onClick={setCurrentTab} >
+            <Tab value="main" active={currentTab === 'main'} onClick={scrollToCurrentTab} >
               Начинки
             </Tab>
           </div>

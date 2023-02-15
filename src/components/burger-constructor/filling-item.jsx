@@ -2,7 +2,7 @@ import { useRef } from 'react';
 import { useDispatch } from "react-redux";
 import { useDrag, useDrop } from "react-dnd";
 import { ConstructorElement, DragIcon } from '@ya.praktikum/react-developer-burger-ui-components';
-import { deleteSelectedItem, MOVE_SELECTED_ITEM } from '../../services/actions/burger';
+import { deleteIngredient, moveSelectedItem } from '../../services/reducers/burger-slice';
 
 export default function FillingItem ({ ingredient, index }) {
   const dispatch = useDispatch();
@@ -44,17 +44,16 @@ export default function FillingItem ({ ingredient, index }) {
       if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) {
         return
       }
-      dispatch({
-        type: MOVE_SELECTED_ITEM,
+      dispatch(moveSelectedItem({
         from: dragIndex,
         to: hoverIndex
-      });
+      }));
       item.index = hoverIndex
     },
   });
   drag(drop(ref));
   const handleDelete = (id) => {
-    dispatch(deleteSelectedItem(id));
+    dispatch(deleteIngredient({id:id}));
   }
   return (
     <li ref={ref} data-handler-id={handlerId} style={{ opacity: opacity }}>

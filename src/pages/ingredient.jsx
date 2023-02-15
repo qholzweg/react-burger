@@ -6,7 +6,7 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectIngredients } from '../services/reducers/selectors';
 import IngredientDetails from '../components/ingredient-details/ingredient-details';
-import { getIngredients } from '../services/actions/ingredients';
+import { getIngredients } from '../services/reducers/ingredients-slice';
 import { NotFound404 } from './not-found';
 
 export const IngredientPage = () => {

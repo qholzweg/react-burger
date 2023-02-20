@@ -1,19 +1,16 @@
-import React, { useEffect, useRef, useMemo } from 'react';
-import { Counter, Tab, InfoIcon } from '@ya.praktikum/react-developer-burger-ui-components';
+import React, { useRef, useMemo } from 'react';
+import { Counter, Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './burger-ingredients.module.css';
 import Price from '../price/price';
-import Modal from '../modal/modal';
-import IngredientDetails from '../ingredient-details/ingredient-details';
 import { useSelector, useDispatch } from 'react-redux';
-import { getIngredients, setCurrentTab } from '../../services/reducers/ingredients-slice';
-import { detailsOpen, detailsClose } from '../../services/reducers/details-slice';
+import { setCurrentTab } from '../../services/reducers/ingredients-slice';
 import { useDrag } from 'react-dnd';
-import { selectIngredients, selectDetails } from '../../services/reducers/selectors';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { selectIngredients } from '../../services/reducers/selectors';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const Ingredient = ({ ingredient, count }) => {
-  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [{ opacity }, ref] = useDrag({
     type: 'ingredient',
@@ -24,13 +21,13 @@ const Ingredient = ({ ingredient, count }) => {
   });
 
   const handleDetailsOpen = () => {
-    dispatch(detailsOpen(ingredient._id));
-    navigate('/ingredients/' + ingredient._id, { state: { keepDetailsModal: true } });
+    navigate('/ingredients/' + ingredient._id, { state: { backgroundLocation: location } });
   }
 
   return (
     <li key={ingredient._id} ref={ref} style={{ opacity: opacity }} onClick={handleDetailsOpen} className={`${styles.ingredient} mr-6 mb-8`}>
       {count !== 0 && <Counter count={count} />}
+
       <img src={ingredient.image} alt={ingredient.name} className={`${styles.image} ml-4 mr-4`} />
       <Price price={ingredient.price} extraClass={styles.price} />
       <p className={`${styles.name} text text_type_main-default`} >{ingredient.name}</p>
@@ -38,7 +35,7 @@ const Ingredient = ({ ingredient, count }) => {
   )
 }
 
-const IngredientsSection = React.forwardRef(({ title, sectionName, collection, onIngredientClick }, ref) => {
+const IngredientsSection = React.forwardRef(({ title, sectionName, collection }, ref) => {
   const content = useMemo(
     () => collection.map((ingredient) => (
       <Ingredient ingredient={ingredient} key={ingredient._id} count={ingredient.__v} />
@@ -56,25 +53,15 @@ const IngredientsSection = React.forwardRef(({ title, sectionName, collection, o
 );
 
 const BurgerIngredients = () => {
-  const { all, ingredientsRequest, ingredientsFailed, currentTab } = useSelector(selectIngredients);
-  const { isDetailsModalOpen, currentIngredient } = useSelector(selectDetails);
+  const { all, currentTab } = useSelector(selectIngredients);
   const dispatch = useDispatch();
-  const { id } = useParams();
-  const { state: locationState } = useLocation();
-  const navigate = useNavigate();
 
   const sectionRef = useRef();
   const bunRef = useRef();
   const sauceRef = useRef();
   const mainRef = useRef();
 
-  useEffect(
-    () => {
-      id && locationState?.keepDetailsModal ?
-        dispatch(getIngredients({id})) :
-        dispatch(getIngredients());
-    }, [dispatch, id, locationState]
-  );
+
 
   const activateTab = (scrollTop) => {
     const boundary = 20;
@@ -99,24 +86,9 @@ const BurgerIngredients = () => {
   const sauces = all.length ? all.filter((el) => el.type === 'sauce') : [];
   const mains = all.length ? all.filter((el) => el.type === 'main') : [];
 
-  const handleDetailsClose = () => {
-    dispatch(detailsClose());
-    navigate('/', { state: { keepDetailsModal: false } });
-  }
+
 
   return (
-    <>
-      {ingredientsRequest &&
-        <div className={styles.message}>
-          <p className={`${styles.messageText} text text_type_main-medium`}><InfoIcon type="primary" /> Пожалуйста, подождите...</p>
-        </div>
-      }
-      {ingredientsFailed &&
-        <div className={styles.message}>
-          <p className={`${styles.messageText} text text-error text_type_main-medium`}><InfoIcon type="error" /> Что-то пошло не так, пожалуйста, проверьте подключение к интернет и попробуйте еще раз</p>
-        </div>
-      }
-      {!ingredientsRequest && !ingredientsFailed && all.length &&
         <section className={`${styles.mainSection} pt-10 pb-10`} ref={sectionRef}>
           <h1 className={`${styles.title} text text_type_main-large mb-5`}>Соберите бургер</h1>
           <div className={`${styles.tabs} mb-10`}>
@@ -136,13 +108,6 @@ const BurgerIngredients = () => {
             <IngredientsSection title='Начинки' sectionName={'main'} collection={mains} ref={mainRef} />
           </div>
         </section>
-      }
-      {!ingredientsRequest && !ingredientsFailed && isDetailsModalOpen && currentIngredient &&
-        <Modal onClose={handleDetailsClose} title="Детали ингредиента">
-          <IngredientDetails ingredient={currentIngredient} />
-        </Modal>}
-
-    </>
   );
 }
 

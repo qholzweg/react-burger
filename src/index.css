@@ -26,7 +26,14 @@ button.link {
   font-family: var(--font-family);
   cursor: pointer;
 }
-
+.message {
+  display: flex;
+  height: 100vh;
+  width: 100%;
+  padding: 5rem;
+  align-items: center;
+  justify-content: center;
+}
 :root {
   --font-family: 'Jet Brains Mono', -apple-system, 'Segoe UI', 'Roboto', 'Oxygen',
   'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',

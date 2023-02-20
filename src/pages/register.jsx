@@ -1,5 +1,4 @@
 import styles from './register.module.css';
-import AppHeader from '../components/app-header/app-header';
 import { Input, PasswordInput, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import { Link, useNavigate } from 'react-router-dom';
 import { register } from '../services/api';
@@ -24,7 +23,6 @@ export const RegisterPage = () => {
   )
   return (
     <div className={styles.RegisterPage}>
-      <AppHeader />
       <main className='content-center text-center'>
         <form className={styles.loginForm} onSubmit={onSubmit}>
           <h3 className='text text_type_main-medium mb-6'>Регистрация</h3>

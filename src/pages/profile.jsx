@@ -1,5 +1,4 @@
 import styles from './profile.module.css';
-import AppHeader from '../components/app-header/app-header';
 import { ProfileMenu } from '../components/profile-menu/profile-menu';
 import { Input, PasswordInput, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useCallback, useEffect, useState } from 'react';
@@ -39,7 +38,6 @@ export const ProfilePage = () => {
 
   return (
     <div className={styles.ProfilePage}>
-      <AppHeader />
       <main className={styles.main}>
         <aside>
           <ProfileMenu />

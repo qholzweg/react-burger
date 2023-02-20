@@ -1,5 +1,4 @@
 import styles from './reset-password.module.css';
-import AppHeader from '../components/app-header/app-header';
 import { Input, PasswordInput, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { useState, useCallback } from 'react';
@@ -34,7 +33,6 @@ export const ResetPasswordPage = () => {
 
   return (
     <div className={styles.ResetPasswordPage}>
-      <AppHeader />
       <main className='content-center text-center'>
         <form className={styles.loginForm} onSubmit={onSubmit} >
           <h3 className='text text_type_main-medium mb-6'>Восстановление пароля</h3>

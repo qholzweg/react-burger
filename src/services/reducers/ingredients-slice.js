@@ -1,14 +1,10 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import { ingredients } from '../api'
-import { detailsOpen } from "./details-slice";
 
 export const getIngredients = createAsyncThunk(
   'ingredients/fetchIngredients',
-  async (id, { dispatch }) => {
+  async () => {
     const response = await ingredients.get();
-    if (id) {
-      dispatch(detailsOpen(id))
-    }
     return response.data;
   }
 );
@@ -47,6 +43,7 @@ export const ingredientsSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(getIngredients.pending, (state) => {
+        console.log(1);
         state.ingredientsRequest = true;
       })
       .addCase(getIngredients.rejected, (state) => {

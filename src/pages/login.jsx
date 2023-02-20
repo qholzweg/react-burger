@@ -1,6 +1,4 @@
-import React from 'react';
 import styles from './login.module.css';
-import AppHeader from '../components/app-header/app-header';
 import { Input, PasswordInput, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { auth } from '../services/api';
@@ -25,7 +23,6 @@ export const LoginPage = () => {
 
   return (
     <div className={styles.LoginPage}>
-      <AppHeader />
       <main className='content-center text-center'>
         <form className={styles.loginForm} onSubmit={onSubmit}>
           <h3 className='text text_type_main-medium mb-6'>Вход</h3>

@@ -1,5 +1,7 @@
 import styles from './ingredient-details.module.css';
-import ingredientsPropTypes from '../../utils/ingredients-prop-types';
+import { useParams } from "react-router-dom";
+import { useSelector } from 'react-redux';
+import { selectIngredients } from '../../services/reducers/selectors';
 
 const InfoItem = ({ name, value }) => (
   <div className={styles.infoItem}>
@@ -8,7 +10,10 @@ const InfoItem = ({ name, value }) => (
   </div>
 )
 
-export default function IngredientDetails({ ingredient: { name, proteins, fat, carbohydrates, calories, image_large } }) {
+export default function IngredientDetails() {
+  const { id } = useParams();
+  const {all}  = useSelector(selectIngredients);
+  const { name, proteins, fat, carbohydrates, calories, image_large } = all.find(item => item._id === id);
 
   return (
     <div className={styles.IngredientDetails}>
@@ -22,7 +27,4 @@ export default function IngredientDetails({ ingredient: { name, proteins, fat, c
       </div>
     </div>
   )
-}
- IngredientDetails.propTypes = {
-  ingredient: ingredientsPropTypes
 }

@@ -8,13 +8,13 @@ export const LoginPage = () => {
   const [form, setValue] = useState({ name: '', email: '', password: '' });
   const navigate = useNavigate();
   const { state } = useLocation();
-  const onChange = e => {
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue({ ...form, [e.target.name]: e.target.value });
   };
   const resetSuccessful = state?.resetSuccessful;
 
   const onSubmit = useCallback(
-    e => {
+    (e: React.SyntheticEvent) => {
       e.preventDefault();
       auth.login(form)
         .then(() => navigate(state?.prev ? state?.prev : '/', { replace: true }));
@@ -28,7 +28,7 @@ export const LoginPage = () => {
           <h3 className='text text_type_main-medium mb-6'>Вход</h3>
           {resetSuccessful && <p className='text mb-4'>Пароль успешно обновлен</p>}
           <Input type='email' placeholder='Email' extraClass='mb-6' name="email" value={form.email} onChange={onChange} />
-          <PasswordInput type='password' placeholder='Пароль' extraClass='mb-6' name="password" value={form.password} onChange={onChange} />
+          <PasswordInput placeholder='Пароль' extraClass='mb-6' name="password" value={form.password} onChange={onChange} />
           <Button htmlType="submit" type='primary' extraClass='mb-20'>
             Войти
           </Button>

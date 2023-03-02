@@ -5,7 +5,7 @@ import { auth } from '../../services/api';
 export const ProfileMenu = () => {
   const navigate = useNavigate();
 
-  const onLogout = (e) => {
+  const onLogout = (e:React.SyntheticEvent) => {
     e.preventDefault();
     auth.logout().then(() => navigate('/login', { replace: true }));
   }
@@ -22,7 +22,7 @@ export const ProfileMenu = () => {
     <ul className={styles.menu}>
       <li key='profile' className='text text_type_main-medium'><NavLink to="/profile" end>Профиль</NavLink></li>
       <li key='history' className='text text_type_main-medium text-secondary'><NavLink to='/profile/orders'>История заказов</NavLink></li>
-      <li key='logout' className='text text_type_main-medium text-secondary'><button className='link' href="#" onClick={onLogout} >
+      <li key='logout' className='text text_type_main-medium text-secondary'><button className='link' onClick={onLogout} >
         Выход
       </button></li>
     </ul>

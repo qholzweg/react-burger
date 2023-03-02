@@ -9,12 +9,12 @@ export const RegisterPage = () => {
   const [failState, setFailState] = useState({ error: false, message: '' })
   const navigate = useNavigate();
 
-  const onChange = e => {
+  const onChange = (e:React.ChangeEvent<HTMLInputElement>) => {
     setValue({ ...form, [e.target.name]: e.target.value });
   };
 
   const onSubmit = useCallback(
-    e => {
+    (e:React.SyntheticEvent) => {
       e.preventDefault();
       register.register(form)
         .then(() => navigate('/', { replace: true }))
@@ -29,7 +29,7 @@ export const RegisterPage = () => {
           {failState.error && <p className='text mb-4 text-error'>Произошла ошибка: {failState.message}</p>}
           <Input type='text' placeholder='Имя' extraClass='mb-6' name="name" value={form.name} onChange={onChange} />
           <Input type='email' placeholder='Email' extraClass='mb-6' name="email" value={form.email} onChange={onChange} />
-          <PasswordInput type='password' placeholder='Пароль' extraClass='mb-6' name="password" value={form.password} onChange={onChange} />
+          <PasswordInput placeholder='Пароль' extraClass='mb-6' name="password" value={form.password} onChange={onChange} />
           <Button htmlType="submit" type='primary' extraClass='mb-20'>
             Зарегистрироваться
           </Button>

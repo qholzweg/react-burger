@@ -9,16 +9,16 @@ export const ForgotPasswordPage = () => {
   const [form, setValue] = useState({ email: '' });
   const navigate = useNavigate();
 
-  const onChange = e => {
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue({ ...form, email: e.target.value });
   };
 
   const onSubmit = useCallback(
-    e => {
+    (e: React.SyntheticEvent) => {
       e.preventDefault();
       register.restore(form)
         .then(() => {
-          navigate('/reset-password', { replace: true, state: {resetRequested: true} });
+          navigate('/reset-password', { replace: true, state: { resetRequested: true } });
         });
     }, [form, navigate]
   )

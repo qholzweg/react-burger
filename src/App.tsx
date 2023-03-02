@@ -6,20 +6,13 @@ import { HomePage, LoginPage, RegisterPage, ForgotPasswordPage, ResetPasswordPag
 import FeedPage from './pages/feed';
 import { getIngredients } from './services/reducers/ingredients-slice';
 import DetailsModal from './components/details-modal';
-import { InfoIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import { selectIngredients } from './services/reducers/selectors';
 import AppHeader from './components/app-header/app-header';
+import { Error, Preloader } from './utils';
 
-const Preloader = () => (
-  <div className="message">
-    <p className="text text_type_main-medium"><InfoIcon type="primary" /> Пожалуйста, подождите...</p>
-  </div>
-)
-const Error = () => (
-  <div className="message">
-    <p className="text text-error text_type_main-medium"><InfoIcon type="error" /> Что-то пошло не так, пожалуйста, проверьте подключение к интернет и попробуйте еще раз</p>
-  </div>
-)
+type TModalState = {
+  background: Location;
+}
 
 export default function App() {
   const dispatch = useDispatch();
@@ -27,10 +20,10 @@ export default function App() {
 
   useEffect(
     () => {
-      dispatch(getIngredients());
+      //TODO
+      dispatch<any>(getIngredients());
     }, [dispatch]
-  );
-  console.log(ingredientsRequest);
+    );
   if (ingredientsRequest) { return <Preloader />; }
   if (ingredientsFailed) { return <Error />; }
 
@@ -42,13 +35,12 @@ export default function App() {
 }
 
 function RoutesList() {
-  const location = useLocation();
-  // let state = location.state as { backgroundLocation?: Location };
+  const location: {state: TModalState | null} = useLocation();
 
   return (
     <>
       <AppHeader />
-      <Routes location={location.state?.backgroundLocation || location}>
+      <Routes location={location.state?.background || location}>
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<ProtectedRouteElement element={<LoginPage />} forAuthenticated={true} />} />
         <Route path="/register" element={<ProtectedRouteElement element={<RegisterPage />} forAuthenticated={true} />} />
@@ -57,11 +49,11 @@ function RoutesList() {
         <Route path="/feed" element={<ProtectedRouteElement element={<FeedPage />} />} />
         <Route path="/profile" element={<ProtectedRouteElement element={<ProfilePage />} />} />
         <Route path="/profile/orders" element={<ProtectedRouteElement element={<OrdersPage />} />} />
-        <Route path="/ingredients/:id" element={location.state?.keepDetailsModal ? <HomePage /> : <IngredientPage />} />
+        <Route path="/ingredients/:id" element={<IngredientPage />} />
         <Route path="*" element={<NotFound404 />} />
       </Routes>
 
-      {location.state?.backgroundLocation && (
+      {location.state?.background && (
         <Routes>
           <Route path="/ingredients/:id" element={<DetailsModal />} />
         </Routes>

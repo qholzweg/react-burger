@@ -1,12 +1,21 @@
-import { useRef } from 'react';
+import { FC, useRef } from 'react';
 import { useDispatch } from "react-redux";
 import { useDrag, useDrop } from "react-dnd";
+import type { Identifier, XYCoord } from 'dnd-core'
 import { ConstructorElement, DragIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import { deleteIngredient, moveSelectedItem } from '../../services/reducers/burger-slice';
+import { TIngredient } from '../../utils/types';
 
-export default function FillingItem ({ ingredient, index }) {
+interface DragItem {
+  index: number
+  id: string
+  type: string
+}
+
+
+const FillingItem: FC<{ ingredient: TIngredient, index: number }> = ({ ingredient, index }) => {
   const dispatch = useDispatch();
-  const ref = useRef(null);
+  const ref = useRef<HTMLLIElement>(null);
   const [{ opacity }, drag] = useDrag({
     type: 'selctedIngredient',
     item: () => {
@@ -16,14 +25,18 @@ export default function FillingItem ({ ingredient, index }) {
       opacity: monitor.isDragging() ? 0.5 : 1
     })
   });
-  const [{ handlerId }, drop] = useDrop({
+  const [{ handlerId }, drop] = useDrop<
+    DragItem,
+    void,
+    { handlerId: Identifier | null }
+  >({
     accept: 'selctedIngredient',
     collect(monitor) {
       return {
         handlerId: monitor.getHandlerId(),
       }
     },
-    hover(item, monitor) {
+    hover(item: DragItem, monitor) {
       // sortable functionality
       if (!ref.current) {
         return
@@ -37,7 +50,7 @@ export default function FillingItem ({ ingredient, index }) {
       const hoverMiddleY =
         (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2
       const clientOffset = monitor.getClientOffset()
-      const hoverClientY = clientOffset.y - hoverBoundingRect.top
+      const hoverClientY = (clientOffset as XYCoord).y - hoverBoundingRect.top
       if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) {
         return
       }
@@ -52,8 +65,9 @@ export default function FillingItem ({ ingredient, index }) {
     },
   });
   drag(drop(ref));
-  const handleDelete = (id) => {
-    dispatch(deleteIngredient({id:id}));
+  const handleDelete = (id: string) => {
+    //TODO: typecheck this
+    dispatch<any>(deleteIngredient({ id: id }));
   }
   return (
     <li ref={ref} data-handler-id={handlerId} style={{ opacity: opacity }}>
@@ -68,3 +82,5 @@ export default function FillingItem ({ ingredient, index }) {
     </li>
   );
 };
+
+export default FillingItem;

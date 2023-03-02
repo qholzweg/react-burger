@@ -9,12 +9,12 @@ export const ResetPasswordPage = () => {
   const [failState, setFailState] = useState({ error: false, message: '' });
   const navigate = useNavigate();
 
-  const onChange = e => {
+  const onChange = (e:React.ChangeEvent<HTMLInputElement>) => {
     setValue({ ...form, [e.target.name]: e.target.value });
   };
 
   const onSubmit = useCallback(
-    e => {
+    (e:React.SyntheticEvent) => {
       e.preventDefault();
       register.resetPassword(form)
         .then(() => navigate('/login', { replace: true, state: {resetSuccessful:true}}), e => setFailState({ error: true, message: e }));
@@ -37,7 +37,7 @@ export const ResetPasswordPage = () => {
         <form className={styles.loginForm} onSubmit={onSubmit} >
           <h3 className='text text_type_main-medium mb-6'>Восстановление пароля</h3>
           {failState.error && <p className='text mb-4 text-error'>Произошла ошибка: {failState.message}</p>}
-          <PasswordInput type='password' name='password' placeholder='Введите новый пароль' extraClass='mb-6' value={form.password} onChange={onChange} />
+          <PasswordInput name='password' placeholder='Введите новый пароль' extraClass='mb-6' value={form.password} onChange={onChange} />
           <Input type='text' name='token' placeholder='Введите код из письма' extraClass='mb-6' value={form.token} onChange={onChange} />
           <Button htmlType="submit" type='primary' extraClass='mb-20'>
             Сохранить

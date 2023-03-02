@@ -1,7 +1,12 @@
 import { useEffect, useState } from "react"
 
-const useModal = (initialState = false, {onOpen, onClose} = {}) => {
-  const [isOpen, setIsOpen] = useState(initialState);
+type TModal = {
+  onOpen: Function | null;
+  onClose: Function | null;
+}
+
+const useModal = (initialState = false, { onOpen, onClose }:TModal = {onOpen:null,onClose:null}) => {
+  const [isOpen, setIsOpen] = useState<boolean>(initialState);
 
   useEffect(() => {
     setIsOpen(initialState)
@@ -20,6 +25,6 @@ const useModal = (initialState = false, {onOpen, onClose} = {}) => {
     isOpen ? close() : open()
   }
 
-  return {isOpen, toggle, open, close}
+  return { isOpen, toggle, open, close }
 }
 export default useModal;

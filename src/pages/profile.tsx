@@ -3,7 +3,7 @@ import { ProfileMenu } from '../components/profile-menu/profile-menu';
 import { Input, PasswordInput, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useCallback, useEffect, useState } from 'react';
 import { auth } from '../services/api';
-import { TResponse, TUser } from '../utils/types';
+import { TUser } from '../utils/types';
 
 export const ProfilePage = () => {
   const [failState, setFailState] = useState({ error: false, message: '' });
@@ -29,7 +29,7 @@ export const ProfilePage = () => {
     getUserInfo();
   }, [getUserInfo]);
 
-  const onSubmit = useCallback((e:React.SyntheticEvent) => {
+  const onSubmit = useCallback((e:React.FormEvent) => {
     e.preventDefault();
     if (form.password === '') delete form.password;
     auth.editUser(form)

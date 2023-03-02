@@ -1,5 +1,5 @@
 import { INGREDIENTS_URL, LOGIN_URL, LOGOUT_URL, ORDERS_URL, PASSWORD_RESET_URL, PASSWORD_RESTORE_URL, REGISTER_URL, RENEW_TOKEN_URL, USER_URL } from "../utils/constants";
-import { TIngredient, TOrder, TResponse, TUser } from "../utils/types";
+import { TIngredient, TOrder, TUser } from "../utils/types";
 import { handleRequest } from "../utils/request";
 import { setCookie, deleteCookie, getCookie } from "./utils";
 

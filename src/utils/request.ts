@@ -2,7 +2,7 @@ import { auth } from '../services/api';
 import { getCookie } from '../services/utils';
 import { TResponse } from './types';
 
-function checkResponse<T>(res: Response) {
+function checkResponse(res: Response) {
   if (res.ok) {
     return res.json();
   }
@@ -43,7 +43,10 @@ export async function handleRequest<TRequest, TData>(url: string, method: string
   if (params) {
     options.body = JSON.stringify(params);
   }
-  if (authorized) options.headers = { 'Authorization': 'Bearer ' + getCookie('accessToken') };
+  if (authorized) options.headers = { 
+    'Authorization': 'Bearer ' + getCookie('accessToken'),
+    'Content-Type': 'application/json' 
+  };
 
   return await request(url, options)
     .then((data) => {

@@ -26,7 +26,6 @@ export const ProfilePage = () => {
     );
     
     useEffect(() => {
-    console.log(1);
     getUserInfo();
   }, [getUserInfo]);
 

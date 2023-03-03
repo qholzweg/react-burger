@@ -1,24 +1,30 @@
-import React from 'react';
+import React, {FC} from 'react';
 import ReactDOM from "react-dom";
 import ModalOverlay from './modal-ovelay/modal-overlay';
 import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './modal.module.css'
 
-const modalRoot = document.getElementById("react-modals");
+const modalRoot = document.getElementById("react-modals") as HTMLDivElement;
 
-const ModalHeader = (props) => (
+export type TModal =  {
+  title?: string;
+  //TODO: How to type check this fn?
+  onClose: any;
+} & React.AllHTMLAttributes<HTMLDivElement>;
+
+const ModalHeader: FC<TModal> = ({onClose, ...props}) => (
   <div className={styles.ModalHeader}>
     <h2 className='text text_type_main-large'>{props.children}</h2>
-    <button className={styles.closeButton} onClick={props.onClose}>
+    <button className={styles.closeButton} onClick={onClose}>
       <CloseIcon type="primary" />
     </button>
   </div>
 );
 
-export default function Modal ({ children, title, onClose }) {
+const Modal: FC<TModal> = ({ title, onClose, ...props }) => {
 
     React.useEffect(() => {
-      const handleEsc = (e) => {
+      const handleEsc = (e:KeyboardEvent) => {
         e.key === "Escape" && onClose();
       };
 
@@ -33,10 +39,11 @@ export default function Modal ({ children, title, onClose }) {
         
         <div className={styles.Modal}>
           <ModalHeader onClose={onClose}>{title}</ModalHeader>
-          {children}
+          {props.children}
         </div>
         <ModalOverlay onClose={onClose} />
       </>,
       modalRoot
     );
   }
+export default Modal;

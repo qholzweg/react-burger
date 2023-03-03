@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import { selectOrder } from '../../../services/reducers/selectors';
 
 export default function OrderDetails() {
-  const { order:{order} } = useSelector(selectOrder);
+  const { order: { order } } = useSelector(selectOrder);
   return (
     <div className={styles.OrderDetails}>
       {order.number && <>
@@ -15,7 +15,6 @@ export default function OrderDetails() {
       <img src={doneImage} alt="Заказ принят" className='mt-15 mb-15' />
       <p className='text text_type_main-default mb-2'>Ваш заказ начали готовить</p>
       <p className='text text-secondary text_type_main-default'>Дождитесь готовности на орбитальной станции</p>
-
     </div>
   )
 }

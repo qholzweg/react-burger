@@ -3,33 +3,37 @@ import { ProfileMenu } from '../components/profile-menu/profile-menu';
 import { Input, PasswordInput, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useCallback, useEffect, useState } from 'react';
 import { auth } from '../services/api';
+import { TUser } from '../utils/types';
 
 export const ProfilePage = () => {
   const [failState, setFailState] = useState({ error: false, message: '' });
+  const [isChanged, setChanged] = useState<boolean>(false);
 
-  const [form, setValue] = useState({ email: '', name: '', password: '', isChanged: false });
 
-  const onChange = e => {
-    setValue({ ...form, [e.target.name]: e.target.value, isChanged: true });
+  const [form, setValue] = useState<TUser>({ email: '', name: '', password: '' });
+
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setValue({ ...form, [e.target.name]: e.target.value });
+    setChanged(true);
   };
 
   const getUserInfo = useCallback(
     () => {
       auth.getUser()
-        .then(data => setValue(data.user))
-        .catch(e => setFailState({ error: true, message: e }));
+      .then(data => setValue(data.user))
+      .catch(e => setFailState({ error: true, message: e }));
     }, []
-  );
-
-  useEffect(() => {
+    );
+    
+    useEffect(() => {
     getUserInfo();
   }, [getUserInfo]);
 
-  const onSubmit = useCallback((e) => {
+  const onSubmit = useCallback((e:React.FormEvent) => {
     e.preventDefault();
     if (form.password === '') delete form.password;
     auth.editUser(form)
-      .then(setValue({ ...form, isChanged: false }));
+      .then(() => setChanged(false));
   }, [form]);
 
   const onCancel = () => {
@@ -49,8 +53,8 @@ export const ProfilePage = () => {
           <form className={styles.loginForm} onSubmit={onSubmit} >
             <Input type='text' placeholder='Имя' extraClass='mb-6' icon='EditIcon' name="name" value={form.name} onChange={onChange} />
             <Input type='email' placeholder='Логин' extraClass='mb-6' icon='EditIcon' name="email" value={form.email} onChange={onChange} />
-            <PasswordInput type='password' placeholder='Пароль' icon='EditIcon' extraClass='mb-6' name="password" value='' onChange={onChange} />
-            {form.isChanged &&
+            <PasswordInput  placeholder='Пароль' icon='EditIcon' extraClass='mb-6' name="password" value='' onChange={onChange} />
+            {isChanged &&
               <>
                 <Button htmlType="submit" type='primary' extraClass='mb-20'>
                   Сохранить

@@ -2,12 +2,12 @@ import { Logo, BurgerIcon, ListIcon, ProfileIcon } from '@ya.praktikum/react-dev
 import { Link, NavLink } from 'react-router-dom';
 import styles from './app-header.module.css';
 
-const HeaderLink = (props) => {
-  const classes = `${styles.link} ${props.extraClass} text text_type_main-default mr-2 pl-5 pr-5 pt-4 pb-4 mt-4 mb-4`;
+const HeaderLink = ({extraClass, to, icon, text}: {extraClass:string, to:string, icon:JSX.Element, text:string}) => {
+  const classes = `${styles.link} ${extraClass} text text_type_main-default mr-2 pl-5 pr-5 pt-4 pb-4 mt-4 mb-4`;
   return (
-    <NavLink to={props.to} className={classes} end >
-      <span className="icon mr-2">{props.icon}</span>
-      {props.text}
+    <NavLink to={to} className={classes} end >
+      <span className="icon mr-2">{icon}</span>
+      {text}
     </NavLink>
   )
 }
@@ -21,7 +21,7 @@ const AppHeader = () => {
     <header className={styles.header}>
       <div className={styles.container}>
         <nav className={styles.left}>
-          <HeaderLink to="/" icon={<BurgerIcon />} text="Конструктор" />
+          <HeaderLink to="/" icon={<BurgerIcon type={'secondary'} />} text="Конструктор" />
           <HeaderLink to="/feed" extraClass="secondary" icon={<ListIcon type="secondary" />} text="Лента заказов" />
         </nav>
         <Link to="/" className={styles.logo}>

@@ -7,19 +7,23 @@ import OrderDetails from '../order-details/order-details';
 import { selectBurger, selectOrder } from '../../../services/reducers/selectors';
 import { auth } from '../../../services/api';
 import { getOrder, orderClose } from '../../../services/reducers/order-slice';
+import { TBurgerContent } from '../../../utils/types';
 
-const findIds = (content) => [content.bun, ...content.filling].map((el) => el ? el._id : null)
+const findIds = (content: TBurgerContent) => [content.bun, ...content.filling].map((el) => el ? el._id : null)
 
 export default function Order() {
   const dispatch = useDispatch();
-  const { selected, total } = useSelector(selectBurger);
+  //TODO: type check this
+  const { selected, total } = useSelector<any, any>(selectBurger);
   const { orderRequest, orderFailed, isOrderModalOpen } = useSelector(selectOrder);
   const isLoggedIn = auth.isLoggedIn();
   const disabled = selected.bun && isLoggedIn ? false : true;
-  
+
   const handleOrderOpen = () => {
     if (!disabled) {
-      dispatch(getOrder(findIds(selected)));
+      //TODO: type check this
+      /* @ts-ignore:next-line */
+      dispatch<any>(getOrder(findIds(selected)));
     }
   }
   const handleOrderClose = () => {

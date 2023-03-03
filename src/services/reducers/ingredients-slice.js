@@ -43,7 +43,6 @@ export const ingredientsSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(getIngredients.pending, (state) => {
-        console.log(1);
         state.ingredientsRequest = true;
       })
       .addCase(getIngredients.rejected, (state) => {

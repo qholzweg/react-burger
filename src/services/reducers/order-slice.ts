@@ -1,15 +1,23 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
+import { TOrder } from "../../utils/types";
 import { order } from '../api'
 
 export const getOrder = createAsyncThunk(
   'order/fetchOrder',
-  async (ids) => {
+  async (ids:(string|null)[]) => {
     const response = await order.get(ids);
-    return response;
+    return response.order;
   }
 );
 
-const orderInitialState = {
+type TOrderState = {
+  order: TOrder;
+  orderRequest: boolean;
+  orderFailed: boolean;
+  isOrderModalOpen: boolean;
+}
+
+const orderInitialState:TOrderState = {
   order: {},
   orderRequest: false,
   orderFailed: false,

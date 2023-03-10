@@ -1,5 +1,4 @@
-import { useDispatch, useSelector } from 'react-redux';
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { ProtectedRouteElement } from './components/protected-route';
 import { HomePage, LoginPage, RegisterPage, ForgotPasswordPage, ResetPasswordPage, ProfilePage, OrdersPage, NotFound404, IngredientPage } from './pages';
@@ -9,19 +8,19 @@ import DetailsModal from './components/details-modal';
 import { selectIngredients } from './services/reducers/selectors';
 import AppHeader from './components/app-header/app-header';
 import { Error, Preloader } from './utils';
+import { useAppDispatch, useAppSelector } from './hooks/store';
 
 type TModalState = {
   background: Location;
 }
 
 export default function App() {
-  const dispatch = useDispatch();
-  const { ingredientsRequest, ingredientsFailed } = useSelector(selectIngredients);
+  const dispatch = useAppDispatch();
+  const { ingredientsRequest, ingredientsFailed } = useAppSelector(selectIngredients);
 
   useEffect(
     () => {
-      //TODO
-      dispatch<any>(getIngredients());
+      dispatch(getIngredients());
     }, [dispatch]
     );
   if (ingredientsRequest) { return <Preloader />; }

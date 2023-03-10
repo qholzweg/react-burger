@@ -1,10 +1,10 @@
 import { FC, useRef } from 'react';
-import { useDispatch } from "react-redux";
 import { useDrag, useDrop } from "react-dnd";
 import type { Identifier, XYCoord } from 'dnd-core'
 import { ConstructorElement, DragIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import { deleteIngredient, moveSelectedItem } from '../../services/reducers/burger-slice';
 import { TIngredient } from '../../utils/types';
+import { useAppDispatch } from '../../hooks/store';
 
 interface DragItem {
   index: number
@@ -14,7 +14,7 @@ interface DragItem {
 
 
 const FillingItem: FC<{ ingredient: TIngredient, index: number }> = ({ ingredient, index }) => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const ref = useRef<HTMLLIElement>(null);
   const [{ opacity }, drag] = useDrag({
     type: 'selctedIngredient',
@@ -66,8 +66,7 @@ const FillingItem: FC<{ ingredient: TIngredient, index: number }> = ({ ingredien
   });
   drag(drop(ref));
   const handleDelete = (id: string) => {
-    //TODO: typecheck this
-    dispatch<any>(deleteIngredient({ id: id }));
+    dispatch(deleteIngredient({ id: id }));
   }
   return (
     <li ref={ref} data-handler-id={handlerId} style={{ opacity: opacity }}>

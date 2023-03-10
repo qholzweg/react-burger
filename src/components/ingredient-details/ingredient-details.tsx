@@ -3,7 +3,6 @@ import styles from './ingredient-details.module.css';
 import { useParams } from "react-router-dom";
 import { useSelector } from 'react-redux';
 import { selectIngredients } from '../../services/reducers/selectors';
-import { TIngredient } from '../../utils/types';
 import { NotFound404 } from '../../pages';
 import { Preloader } from '../../utils';
 
@@ -15,12 +14,12 @@ const InfoItem: FC<{name:string, value: string}> = ({ name, value }) => (
 )
 
 export default function IngredientDetails() {
-  console.log('d');
   const { id } = useParams<string>();
   const { all }  = useSelector(selectIngredients);
   if (all.length === 0) return <Preloader />; 
-  const { name, proteins, fat, carbohydrates, calories, image_large } = all.find((item: TIngredient) => item._id === id);
-  if (!name) return (<NotFound404 />)
+  const ingredient = all.find(item => item._id === id);
+  if (!ingredient) return (<NotFound404 />)
+  const { name, proteins, fat, carbohydrates, calories, image_large } = ingredient;
 
   return (
     <div className={styles.IngredientDetails}>

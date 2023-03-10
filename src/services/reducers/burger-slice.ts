@@ -1,20 +1,22 @@
 import { createSlice } from "@reduxjs/toolkit"
+import { TBurgerContent, TIngredient } from "../../utils/types";
 import { decreaseIngredientCount, increaseIngredientCount, setIngredientCount, setIngredientCountByType } from "./ingredients-slice";
 import { selectIngredient } from "./selectors";
+import type { RootState, AppDispatch } from '../store'
 
-function countTotalFn(content) {
+function countTotalFn(content:TBurgerContent) {
   let total = 0;
   const { bun, filling } = content;
   if (bun) total = bun.price * 2;
   if (filling && filling.length) total += filling.reduce((acc, current) => acc + current.price, 0);
   return total;
 }
-function deleteElement(array, id) {
+function deleteElement(array:TIngredient[], id:string) {
   let arrayCopy = [...array];
   arrayCopy.splice(arrayCopy.findIndex(item => item._id === id), 1);
   return arrayCopy;
 }
-function moveElement(array, fromIndex, toIndex) {
+function moveElement(array:TIngredient[], fromIndex:number, toIndex:number) {
   const arrayCopy = [...array];
   const element = arrayCopy.splice(fromIndex, 1)[0];
   arrayCopy.splice(toIndex, 0, element);
@@ -22,7 +24,12 @@ function moveElement(array, fromIndex, toIndex) {
   return arrayCopy;
 }
 
-const burgerInitialState = {
+type TburegerState = {
+  selected: TBurgerContent;
+  total: number;
+}
+
+const burgerInitialState: TburegerState = {
   selected: {
     bun: null,
     filling: []
@@ -52,10 +59,10 @@ export const burgerSlice = createSlice({
   }
 });
 
-export const addSelectedItemById = ({id}) => (dispatch, getState) => {
+export const addSelectedItemById = ({id}: {id:string}) => (dispatch:AppDispatch, getState:() => RootState) => {
   const item = selectIngredient(getState(), id);
       dispatch(addSelectedItem(item));
-      if (item.type !== 'bun') {
+      if (item && item.type !== 'bun') {
         dispatch(increaseIngredientCount(id));
       } else {
         dispatch(setIngredientCountByType({ingredientType: 'bun', count: 0}));
@@ -64,7 +71,7 @@ export const addSelectedItemById = ({id}) => (dispatch, getState) => {
       dispatch(countTotal());
 };
 
-export const deleteIngredient = ({id}) => dispatch => {
+export const deleteIngredient = ({id}: {id:string}) => (dispatch:AppDispatch) => {
   dispatch(deleteSelectedItem(id));
   dispatch(decreaseIngredientCount(id))
 }

@@ -2,10 +2,10 @@ export type TIngredient = {
   readonly _id: string;
   readonly name: string;
   readonly type: string;
-  readonly proteins: number;
-  readonly fat: number;
-  readonly carbohydrates: number;
-  readonly calories: number;
+  readonly proteins: string;
+  readonly fat: string;
+  readonly carbohydrates: string;
+  readonly calories: string;
   readonly price: number;
   readonly image: string;
   readonly image_mobile: string;
@@ -13,9 +13,7 @@ export type TIngredient = {
   readonly __v: number;
 }
 export type TOrder = {
-  readonly order: {
-    number: string
-  }
+    number?: string
 }
 export type TUser = {
   password?: string;
@@ -25,7 +23,7 @@ export type TUser = {
 
 
 export type TBurgerContent = {
-  bun: TIngredient;
+  bun: TIngredient | null;
   filling: TIngredient[];
 }
 

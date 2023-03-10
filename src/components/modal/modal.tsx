@@ -8,8 +8,7 @@ const modalRoot = document.getElementById("react-modals") as HTMLDivElement;
 
 export type TModal =  {
   title?: string;
-  //TODO: How to type check this fn?
-  onClose: any;
+  onClose: () => void;
 } & React.AllHTMLAttributes<HTMLDivElement>;
 
 const ModalHeader: FC<TModal> = ({onClose, ...props}) => (

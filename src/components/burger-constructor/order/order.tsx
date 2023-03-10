@@ -1,4 +1,3 @@
-import { useSelector, useDispatch } from 'react-redux';
 import { Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './order.module.css';
 import Price from '../../price/price';
@@ -8,22 +7,21 @@ import { selectBurger, selectOrder } from '../../../services/reducers/selectors'
 import { auth } from '../../../services/api';
 import { getOrder, orderClose } from '../../../services/reducers/order-slice';
 import { TBurgerContent } from '../../../utils/types';
+import { useAppDispatch, useAppSelector } from '../../../hooks/store';
 
 const findIds = (content: TBurgerContent) => [content.bun, ...content.filling].map((el) => el ? el._id : null)
 
 export default function Order() {
-  const dispatch = useDispatch();
-  //TODO: type check this
-  const { selected, total } = useSelector<any, any>(selectBurger);
-  const { orderRequest, orderFailed, isOrderModalOpen } = useSelector(selectOrder);
+  const dispatch = useAppDispatch();
+  const { selected, total } = useAppSelector(selectBurger);
+  const { orderRequest, orderFailed, isOrderModalOpen } = useAppSelector(selectOrder);
   const isLoggedIn = auth.isLoggedIn();
   const disabled = selected.bun && isLoggedIn ? false : true;
 
   const handleOrderOpen = () => {
+    const ids = findIds(selected);
     if (!disabled) {
-      //TODO: type check this
-      /* @ts-ignore:next-line */
-      dispatch<any>(getOrder(findIds(selected)));
+      dispatch(getOrder(ids));
     }
   }
   const handleOrderClose = () => {

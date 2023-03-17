@@ -1,7 +1,7 @@
 import { useLocation, useNavigate } from "react-router-dom"
 import { useAppSelector } from "../../../hooks/store"
 import { selectHistory } from "../../../services/reducers/selectors"
-import { OrderCard } from "../order-card/order-card"
+import OrderCard from "../order-card/order-card"
 import styles from "./feed-history.module.css"
 export const FeedHistory = () => {
   const { orders } = useAppSelector(selectHistory);

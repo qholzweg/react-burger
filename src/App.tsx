@@ -10,6 +10,7 @@ import AppHeader from './components/app-header/app-header';
 import { Error, Preloader } from './utils';
 import { useAppDispatch, useAppSelector } from './hooks/store';
 import OrderModal from './components/modal/order-modal';
+import { ROUTE_ANY, ROUTE_FEED, ROUTE_FEED_ID, ROUTE_FORGOT, ROUTE_HISTORY, ROUTE_HISTORY_ID, ROUTE_INGREDIENT, ROUTE_LOGIN, ROUTE_PROFILE, ROUTE_REGISTER, ROUTE_RESET, ROUTE_ROOT } from './utils/constants';
 
 type TModalState = {
   background: Location;
@@ -41,25 +42,25 @@ function RoutesList() {
     <>
       <AppHeader />
       <Routes location={location.state?.background || location}>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/login" element={<ProtectedRouteElement element={<LoginPage />} forAuthenticated={true} />} />
-        <Route path="/register" element={<ProtectedRouteElement element={<RegisterPage />} forAuthenticated={true} />} />
-        <Route path="/forgot-password" element={<ProtectedRouteElement element={<ForgotPasswordPage />} forAuthenticated={true} />} />
-        <Route path="/reset-password" element={<ProtectedRouteElement element={<ResetPasswordPage />} forAuthenticated={true} />} />
-        <Route path="/feed" element={<FeedPage />} />
-        <Route path="/feed/:id" element={<OrderPage />} />
-        <Route path="/profile" element={<ProtectedRouteElement element={<ProfilePage />} />} />
-        <Route path="/profile/orders" element={<ProtectedRouteElement element={<OrdersPage />} />} />
-        <Route path="/profile/orders/:id" element={<ProtectedRouteElement element={<OrderPage />} />} />
-        <Route path="/ingredients/:id" element={<IngredientPage />} />
-        <Route path="*" element={<NotFound404 />} />
+        <Route path={ROUTE_ROOT} element={<HomePage />} />
+        <Route path={ROUTE_LOGIN} element={<ProtectedRouteElement element={<LoginPage />} forAuthenticated={true} />} />
+        <Route path={ROUTE_REGISTER} element={<ProtectedRouteElement element={<RegisterPage />} forAuthenticated={true} />} />
+        <Route path={ROUTE_FORGOT} element={<ProtectedRouteElement element={<ForgotPasswordPage />} forAuthenticated={true} />} />
+        <Route path={ROUTE_RESET} element={<ProtectedRouteElement element={<ResetPasswordPage />} forAuthenticated={true} />} />
+        <Route path={ROUTE_FEED} element={<FeedPage />} />
+        <Route path={ROUTE_FEED_ID} element={<OrderPage />} />
+        <Route path={ROUTE_PROFILE} element={<ProtectedRouteElement element={<ProfilePage />} />} />
+        <Route path={ROUTE_HISTORY} element={<ProtectedRouteElement element={<OrdersPage />} />} />
+        <Route path={ROUTE_HISTORY_ID} element={<ProtectedRouteElement element={<OrderPage />} />} />
+        <Route path={ROUTE_INGREDIENT} element={<IngredientPage />} />
+        <Route path={ROUTE_ANY} element={<NotFound404 />} />
       </Routes>
 
       {location.state?.background && (
         <Routes>
-          <Route path="/ingredients/:id" element={<DetailsModal />} />
-          <Route path="/feed/:id" element={<OrderModal />} />
-          <Route path="/profile/orders/:id" element={<OrderModal />} />
+          <Route path={ROUTE_INGREDIENT} element={<DetailsModal />} />
+          <Route path={ROUTE_FEED_ID} element={<OrderModal />} />
+          <Route path={ROUTE_HISTORY_ID} element={<OrderModal />} />
         </Routes>
       )}
     </>

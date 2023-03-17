@@ -13,7 +13,7 @@ export default function OrderModal() {
   const { id } = useParams();
   useEffect(() => {
     if (id) dispatch(getOrder(id))
-  }, [])
+  }, [id, dispatch])
   const { order, orderRequest } = useAppSelector(selectOrder);
   const navigate = useNavigate();
 
@@ -22,7 +22,6 @@ export default function OrderModal() {
 
 
   const handleOrderClose = () => {
-    console.log(1);
     navigate(-1);
   }
 

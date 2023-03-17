@@ -1,7 +1,7 @@
 import { useLocation, useNavigate } from "react-router-dom"
 import { useAppSelector } from "../../../hooks/store"
 import { selectFeed } from "../../../services/reducers/selectors"
-import { OrderCard } from "../order-card/order-card"
+import OrderCard from "../order-card/order-card"
 import styles from "./feed-orders.module.css"
 export const FeedOrders = () => {
   const { orders } = useAppSelector(selectFeed);

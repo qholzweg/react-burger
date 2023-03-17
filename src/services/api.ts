@@ -52,7 +52,11 @@ export const auth = {
   editUser: (form: TUser) => handleRequest<TUser, void>(USER_URL, TXHRMethod.PATCH, form, true),
   refresh: (): Promise<void> => handleRequest<{ token: string | undefined }, TAccess>(RENEW_TOKEN_URL, TXHRMethod.POST, { token: getCookie('refreshToken') })
     .then(({ accessToken, refreshToken }: TAccess) => {
+      auth.deleteUser();
       auth.addUser(accessToken, refreshToken);
+    }).catch((err) => {
+      auth.logout();
+      window.location.reload();
     })
 }
 

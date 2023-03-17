@@ -1,5 +1,4 @@
-import { FC, useMemo } from "react"
-import { useLocation, useNavigate } from "react-router-dom"
+import { FC, useMemo, memo } from "react"
 import { useAppSelector } from "../../../hooks/store"
 import { selectIngredients } from "../../../services/reducers/selectors"
 import { formatDate } from "../../../utils/format-date"
@@ -7,7 +6,8 @@ import { TIngredient, TOrder } from "../../../services/types/types"
 import Price from "../../../components/price/price"
 import styles from "./order-card.module.css"
 import { OrderStatus } from "./order-status"
-export const OrderCard: FC<{ order: TOrder, showStatus?: boolean }> = ({ order, showStatus = false }) => {
+
+const OrderCard: FC<{ order: TOrder, showStatus?: boolean }> = ({ order, showStatus = false }) => {
 
   const { all } = useAppSelector(selectIngredients);
   const maxIngredients = 5;
@@ -44,8 +44,6 @@ export const OrderCard: FC<{ order: TOrder, showStatus?: boolean }> = ({ order, 
   }, [order, all]);
 
   if (!orderInfo) return null;
-
-
 
   return (
     <div className={styles.OrderCard}>
@@ -93,3 +91,5 @@ export const OrderCard: FC<{ order: TOrder, showStatus?: boolean }> = ({ order, 
     </div>
   )
 }
+
+export default memo(OrderCard);

@@ -4,85 +4,103 @@ import { RootState } from '../store';
 import { auth } from '../api';
 
 export type TwsActionTypes = {
-    wsConnect: ActionCreatorWithPayload<string>,
-    wsDisconnect: ActionCreatorWithoutPayload,
-    wsSendMessage?: ActionCreatorWithPayload<any>,
-    wsConnecting: ActionCreatorWithoutPayload,
-    onOpen: ActionCreatorWithoutPayload,
-    onClose: ActionCreatorWithoutPayload,
-    onError: ActionCreatorWithPayload<string>,
-    onMessage: ActionCreatorWithPayload<any>,
+  wsConnect: ActionCreatorWithPayload<string>,
+  wsDisconnect: ActionCreatorWithoutPayload,
+  wsSendMessage?: ActionCreatorWithPayload<any>,
+  wsConnecting: ActionCreatorWithoutPayload,
+  onOpen: ActionCreatorWithoutPayload,
+  onClose: ActionCreatorWithoutPayload,
+  onError: ActionCreatorWithPayload<string>,
+  onMessage: ActionCreatorWithPayload<any>,
 }
 
 export const socketMiddleware = (wsActions: TwsActionTypes): Middleware<{}, RootState> => {
-    return (store) => {
-      let socket: WebSocket | null = null;
-      let isConnected = false;
-      let reconnectTimer = 0;
-      let url = '';
+  return (store) => {
+    let socket: WebSocket | null = null;
+    let isConnected = false;
+    let reconnectTimer = 0;
+    let url = '';
 
-      return next => action => {
-        const { dispatch } = store;
-        const { wsConnect, wsDisconnect, wsSendMessage, onOpen, 
-          onClose, onError, onMessage, wsConnecting } = wsActions;
+    return next => action => {
+      const { dispatch } = store;
+      const { wsConnect, wsDisconnect, wsSendMessage, onOpen,
+        onClose, onError, onMessage, wsConnecting } = wsActions;
 
-        if (wsConnect.match(action)) {
-          url = action.payload;
-          socket = new WebSocket(url);
-          isConnected = true;
-          dispatch(wsConnecting());
-        }
+      if (wsConnect.match(action)) {
+        url = action.payload;
+        socket = new WebSocket(url);
+        isConnected = true;
+        dispatch(wsConnecting());
+      }
 
-        if (socket) {
-          socket.onopen = () => {
-            dispatch(onOpen());
-          };
-  
-          socket.onerror = err  => {
-            console.log('error')
-            console.log(err)
-          };
-  
-          socket.onmessage = event => {
-            const { data } = event;
-            const parsedData = JSON.parse(data);
-            dispatch(onMessage(parsedData));
-          };
-  
-          socket.onclose = event => {
-            if (event.code !== 1000) {
-              console.log('error ' + event.code.toString())
-              dispatch(onError(event.code.toString()));
-            }
-            console.log('close')
-            dispatch(onClose());
+      if (socket) {
+        socket.onopen = () => {
+          dispatch(onOpen());
+        };
 
-            if (isConnected) {
-              dispatch(wsConnecting());
-              reconnectTimer = window.setTimeout(() => {
-                dispatch(wsConnect(url));
-              }, 3000)
-            }
+        socket.onerror = err => {
+          console.log('error')
+          console.log(err)
+        };
 
-          };
-  
-          if (wsSendMessage && wsSendMessage.match(action)) {
-            console.log('send')
-            socket.send(JSON.stringify(action.payload));
+        socket.onmessage = event => {
+          const { data } = event;
+          const parsedData = JSON.parse(data);
+          if (parsedData?.message === 'Invalid or missing token') {
+            auth.refresh().then(
+              () => {
+                const wssUrl = new URL(url);
+                const token = auth.getToken();
+                if (token) wssUrl.searchParams.set(
+                  "token",
+                  token
+                );
+                dispatch({ type: wsConnect, payload: wssUrl });
+              }
+            ).catch((err) => {
+              dispatch({ type: onError, payload: err });
+            });
+            dispatch({ type: wsDisconnect });
+
+            return;
+          }
+          dispatch(onMessage(parsedData));
+
+        };
+
+        socket.onclose = event => {
+          if (event.code !== 1000) {
+            console.log('error ' + event.code.toString())
+            dispatch(onError(event.code.toString()));
+          }
+          console.log('close')
+          dispatch(onClose());
+
+          if (isConnected) {
+            dispatch(wsConnecting());
+            reconnectTimer = window.setTimeout(() => {
+              dispatch(wsConnect(url));
+            }, 3000)
           }
 
-          if (wsDisconnect.match(action)) {
-            console.log('disconnect')
-            clearTimeout(reconnectTimer)
-            isConnected = false;
-            reconnectTimer = 0;
-            socket.close();
-            dispatch(onClose());
-          }
+        };
+
+        if (wsSendMessage && wsSendMessage.match(action)) {
+          console.log('send')
+          socket.send(JSON.stringify(action.payload));
         }
-  
-        next(action);
-      };
+
+        if (wsDisconnect.match(action)) {
+          console.log('disconnect')
+          clearTimeout(reconnectTimer)
+          isConnected = false;
+          reconnectTimer = 0;
+          socket.close();
+          dispatch(onClose());
+        }
+      }
+
+      next(action);
     };
   };
-  
+};

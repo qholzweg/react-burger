@@ -3,7 +3,7 @@ import { useDrag, useDrop } from "react-dnd";
 import type { Identifier, XYCoord } from 'dnd-core'
 import { ConstructorElement, DragIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import { deleteIngredient, moveSelectedItem } from '../../services/reducers/burger-slice';
-import { TIngredient } from '../../utils/types';
+import { TIngredient } from '../../services/types/types';
 import { useAppDispatch } from '../../hooks/store';
 
 interface DragItem {

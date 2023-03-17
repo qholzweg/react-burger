@@ -6,7 +6,7 @@ import { DndProvider } from 'react-dnd';
 
 export default function HomePage() {
   return (
-    <main className='pl-5 pr-5'>
+    <main className='pl-5 pr-5 grid-2-cols'>
       <DndProvider backend={HTML5Backend}>
         <section className={styles.ingredientsBlock}>
           <BurgerIngredients />

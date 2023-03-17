@@ -1,14 +1,15 @@
 import { useEffect } from 'react';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { ProtectedRouteElement } from './components/protected-route';
-import { HomePage, LoginPage, RegisterPage, ForgotPasswordPage, ResetPasswordPage, ProfilePage, OrdersPage, NotFound404, IngredientPage } from './pages';
+import { HomePage, LoginPage, RegisterPage, ForgotPasswordPage, ResetPasswordPage, ProfilePage, OrdersPage, NotFound404, IngredientPage, OrderPage } from './pages';
 import FeedPage from './pages/feed';
 import { getIngredients } from './services/reducers/ingredients-slice';
-import DetailsModal from './components/details-modal';
+import DetailsModal from './components/modal/details-modal';
 import { selectIngredients } from './services/reducers/selectors';
 import AppHeader from './components/app-header/app-header';
 import { Error, Preloader } from './utils';
 import { useAppDispatch, useAppSelector } from './hooks/store';
+import OrderModal from './components/modal/order-modal';
 
 type TModalState = {
   background: Location;
@@ -45,9 +46,11 @@ function RoutesList() {
         <Route path="/register" element={<ProtectedRouteElement element={<RegisterPage />} forAuthenticated={true} />} />
         <Route path="/forgot-password" element={<ProtectedRouteElement element={<ForgotPasswordPage />} forAuthenticated={true} />} />
         <Route path="/reset-password" element={<ProtectedRouteElement element={<ResetPasswordPage />} forAuthenticated={true} />} />
-        <Route path="/feed" element={<ProtectedRouteElement element={<FeedPage />} />} />
+        <Route path="/feed" element={<FeedPage />} />
+        <Route path="/feed/:id" element={<OrderPage />} />
         <Route path="/profile" element={<ProtectedRouteElement element={<ProfilePage />} />} />
         <Route path="/profile/orders" element={<ProtectedRouteElement element={<OrdersPage />} />} />
+        <Route path="/profile/orders/:id" element={<ProtectedRouteElement element={<OrderPage />} />} />
         <Route path="/ingredients/:id" element={<IngredientPage />} />
         <Route path="*" element={<NotFound404 />} />
       </Routes>
@@ -55,6 +58,8 @@ function RoutesList() {
       {location.state?.background && (
         <Routes>
           <Route path="/ingredients/:id" element={<DetailsModal />} />
+          <Route path="/feed/:id" element={<OrderModal />} />
+          <Route path="/profile/orders/:id" element={<OrderModal />} />
         </Routes>
       )}
     </>

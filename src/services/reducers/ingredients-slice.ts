@@ -1,6 +1,6 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { ingredients } from '../api';
-import { TIngredient } from "../../utils/types";
+import { TIngredient } from "../types/types";
 
 export const getIngredients = createAsyncThunk(
   'ingredients/fetchIngredients',
@@ -10,11 +10,13 @@ export const getIngredients = createAsyncThunk(
   }
 );
 
+type TBunTypes = 'buns' | 'main' | 'sauces';
+
 type TIngredientsState = {
   all: TIngredient[];
   ingredientsRequest: boolean;
   ingredientsFailed: boolean;
-  currentTab: 'buns' | 'main' | 'sauces';
+  currentTab: TBunTypes;
 }
 
 const ingredientsInitialState: TIngredientsState = {
@@ -27,20 +29,21 @@ const ingredientsInitialState: TIngredientsState = {
 export const ingredientsSlice = createSlice({
   name: 'ingredients',
   initialState: ingredientsInitialState,
+  
   reducers: {
-    setCurrentTab: (state, action) => {
+    setCurrentTab: (state, action: PayloadAction<TBunTypes>) => {
       state.currentTab = action.payload
     },
-    increaseIngredientCount: (state, action) => {
+    increaseIngredientCount: (state, action:PayloadAction<string>) => {
       state.all = [...state.all].map(item => item._id === action.payload ? { ...item, __v: item.__v + 1 } : item)
     },
-    decreaseIngredientCount: (state, action) => {
+    decreaseIngredientCount: (state, action:PayloadAction<string>) => {
       state.all = [...state.all].map(item => item._id === action.payload ? { ...item, __v: item.__v - 1 } : item)
     },
-    setIngredientCount: (state, action) => {
+    setIngredientCount: (state, action:PayloadAction<{id: string, count:number}>) => {
       state.all = [...state.all].map(item => item._id === action.payload?.id ? { ...item, __v: action.payload?.count } : item)
     },
-    setIngredientCountByType: (state, action) => {
+    setIngredientCountByType: (state, action:PayloadAction<{ingredientType?: string, count:number}>) => {
       state.all = [...state.all].map(item => item.type === action.payload?.ingredientType ? { ...item, __v: action.payload?.count } : item)
     },
     //возвращает к начальному значению стейт ингредиентов
@@ -58,7 +61,7 @@ export const ingredientsSlice = createSlice({
         state.ingredientsFailed = true;
         state.all = [];
       })
-      .addCase(getIngredients.fulfilled, (state, action) => {
+      .addCase(getIngredients.fulfilled, (state, action:PayloadAction<TIngredient[]>) => {
         state.ingredientsRequest = false;
         state.all = action.payload;
       });

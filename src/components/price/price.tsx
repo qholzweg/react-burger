@@ -14,17 +14,19 @@ const getSize = (size:string, type?:string) => {
 
 type TPrice = {
   size?: 'normal' | 'medium' | 'large';
+  qty?: number;
   price:number;
-  extraClass:string;
+  extraClass?:string;
 }
 
-const Price:FC<TPrice> = ({size = 'normal', price, extraClass}) => {
+const Price:FC<TPrice> = ({size = 'normal', qty, price, extraClass}) => {
   const blockClass = getSize(size, 'block');
   const textClass = getSize(size);
+  const qtyText = qty && qty > 1 ? qty + ' x ' : '';
 
   return (
     <span className={`${extraClass} ${styles.priceBlock} ${blockClass}`}>
-      <span className={`${styles.price} mr-1 text ${textClass}`}>{price}</span>
+      <span className={`${styles.price} mr-1 text ${textClass}`}>{`${qtyText}${price}`}</span>
       <CurrencyIcon type="primary" />
     </span>
   );

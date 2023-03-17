@@ -1,6 +1,6 @@
-import IngredientDetails from "./ingredient-details/ingredient-details";
+import IngredientDetails from "../ingredient-details/ingredient-details";
 import { useNavigate } from "react-router-dom";
-import Modal from "./modal/modal";
+import Modal from "./modal";
 
 export default function DetailsModal() {
   const navigate = useNavigate();

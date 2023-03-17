@@ -9,7 +9,7 @@ import styles from './burger-constructor.module.css';
 import FillingItem from './filling-item'
 import Order from './order/order';
 import { selectBurger } from '../../services/reducers/selectors';
-import { TIngredient } from '../../utils/types';
+import { TIngredient } from '../../services/types/types';
 import { useAppSelector, useAppDispatch } from '../../hooks/store';
 
 const BurgerConstructor = () => {

@@ -13,14 +13,6 @@
   overflow-y: auto;
   position: relative;
 }
-::-webkit-scrollbar {
-  width: 8px;
-  background: #2F2F37;
-  margin-left: 8px;
-}
-::-webkit-scrollbar-thumb {
-  background-color: #8585AD;
-}
 .ingredientsSection {
   display: grid;
   grid-template-columns: 1fr 1fr;

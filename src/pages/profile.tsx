@@ -3,7 +3,7 @@ import { ProfileMenu } from '../components/profile-menu/profile-menu';
 import { Input, PasswordInput, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useCallback, useEffect, useState } from 'react';
 import { auth } from '../services/api';
-import { TUser } from '../utils/types';
+import { TUser } from '../services/types/types';
 
 export const ProfilePage = () => {
   const [failState, setFailState] = useState({ error: false, message: '' });

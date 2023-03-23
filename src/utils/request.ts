@@ -1,6 +1,6 @@
 import { auth } from '../services/api';
 import { getCookie } from '../services/utils';
-import { TResponse } from './types';
+import { TResponse, TXHRMethod } from '../services/types/types';
 
 function checkResponse(res: Response) {
   if (res.ok) {
@@ -22,13 +22,13 @@ function isResJson(res: Response): boolean {
 }
   
 
-async function handleExpired<TRequest>(url: string, method: string, params: TRequest, authorized: boolean = false): Promise<void> {
+async function handleExpired<TRequest>(url: string, method: TXHRMethod, params: TRequest, authorized: boolean = false): Promise<void> {
   return await auth.refresh()
     .then(():any => handleRequest(url, method, params, authorized))
     .catch(() => auth.logout().then(() => new Error("Пожалуйста, войдите в систему снова")))
 }
 
-export async function handleRequest<TRequest, TData>(url: string, method: string = 'GET', params: TRequest, authorized: boolean = false):Promise<TResponse<TData>> {
+export async function handleRequest<TRequest, TData>(url: string, method: TXHRMethod = TXHRMethod.GET, params: TRequest, authorized: boolean = false):Promise<TResponse<TData>> {
   let options: RequestInit = {
     method: method,
     mode: 'cors',

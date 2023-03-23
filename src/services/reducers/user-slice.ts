@@ -1,6 +1,11 @@
-import { createSlice } from "@reduxjs/toolkit"
+import { createSlice } from "@reduxjs/toolkit";
+import { RootState } from "../store";
 
-const initialState = {
+type TUserState = {
+  resetRequested: boolean;
+}
+
+const initialState: TUserState = {
   resetRequested: false
 }
 export const userSlice = createSlice({
@@ -17,4 +22,5 @@ export const userSlice = createSlice({
 });
 
 export const {resetRequested, resetDrop} = userSlice.actions;
+
 export default userSlice.reducer;

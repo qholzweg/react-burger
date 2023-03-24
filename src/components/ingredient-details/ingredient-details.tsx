@@ -26,10 +26,10 @@ export default function IngredientDetails() {
       <img src={image_large} alt={name} className="mb-4" />
       <h1 className='mb-8 text text_type_main-medium'>{name}</h1>
       <div className={`${styles.info} text text-secondary`}>
-        <InfoItem name="Калории,ккал" value={calories} />
-        <InfoItem name="Белки, г" value={proteins} />
-        <InfoItem name="Жиры, г" value={fat} />
-        <InfoItem name="Углеводы, г" value={carbohydrates} />
+        <InfoItem name="Калории,ккал" value={String(calories)} />
+        <InfoItem name="Белки, г" value={String(proteins)} />
+        <InfoItem name="Жиры, г" value={String(fat)} />
+        <InfoItem name="Углеводы, г" value={String(carbohydrates)} />
       </div>
     </div>
   )

@@ -1,7 +1,6 @@
 import { ActionCreatorWithoutPayload, ActionCreatorWithPayload } from '@reduxjs/toolkit';
 import { Middleware } from 'redux';
 import { RootState } from '../store';
-import { auth } from '../api';
 
 export type TwsActionTypes = {
     wsConnect: ActionCreatorWithPayload<string>,

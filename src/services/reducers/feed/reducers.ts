@@ -1,5 +1,5 @@
 import { createReducer } from '@reduxjs/toolkit'
-import { feedConnect, feedDisconnect, wsFeedConnecting, wsFeedOpen, wsFeedClose, wsFeedMessage, wsFeedError } from "./actions";
+import { wsFeedConnecting, wsFeedOpen, wsFeedClose, wsFeedMessage, wsFeedError } from "./actions";
 import { TOrdersData, TWebsocketStatus } from '../../types/types';
 
 export type FeedStore = TOrdersData & {

@@ -1,5 +1,4 @@
 import { FC, useMemo } from "react"
-import { useLocation, useNavigate } from "react-router-dom"
 import { useAppSelector } from "../../../hooks/store"
 import { selectIngredients } from "../../../services/reducers/selectors"
 import { formatDate } from "../../../utils/format-date"

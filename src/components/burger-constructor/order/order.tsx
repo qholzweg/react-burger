@@ -14,7 +14,7 @@ const findIds = (content: TBurgerContent) => [content.bun, ...content.filling].m
 export default function Order() {
   const dispatch = useAppDispatch();
   const { selected, total } = useAppSelector(selectBurger);
-  const { orderRequest, orderFailed, isOrderModalOpen } = useAppSelector(selectOrder);
+  const { isOrderModalOpen } = useAppSelector(selectOrder);
   const isLoggedIn = auth.isLoggedIn();
   const disabled = selected.bun && isLoggedIn ? false : true;
 

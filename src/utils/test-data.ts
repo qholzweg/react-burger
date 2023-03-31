@@ -12,7 +12,8 @@ export const bunIngredient: TIngredient = {
   "image": "https://code.s3.yandex.net/react/code/bun-02.png",
   "image_mobile": "https://code.s3.yandex.net/react/code/bun-02-mobile.png",
   "image_large": "https://code.s3.yandex.net/react/code/bun-02-large.png",
-  "__v": 0
+  "__v": 0,
+  _uid: expect.anything()
 }
 export const bun2Ingredient: TIngredient = {
   "_id": "60d3b41abdacab0026a733c7",
@@ -26,7 +27,8 @@ export const bun2Ingredient: TIngredient = {
   "image": "https://code.s3.yandex.net/react/code/bun-01.png",
   "image_mobile": "https://code.s3.yandex.net/react/code/bun-01-mobile.png",
   "image_large": "https://code.s3.yandex.net/react/code/bun-01-large.png",
-  "__v": 0
+  "__v": 0,
+  _uid: expect.anything()
 }
 export const mainIngredient: TIngredient = {
   "_id": "60d3b41abdacab0026a733c9",
@@ -40,7 +42,8 @@ export const mainIngredient: TIngredient = {
   "image": "https://code.s3.yandex.net/react/code/meat-02.png",
   "image_mobile": "https://code.s3.yandex.net/react/code/meat-02-mobile.png",
   "image_large": "https://code.s3.yandex.net/react/code/meat-02-large.png",
-  "__v": 0
+  "__v": 0,
+  _uid: expect.anything()
 }
 export const sauceIngredient: TIngredient = {
   "_id": "60d3b41abdacab0026a733ce",
@@ -54,7 +57,8 @@ export const sauceIngredient: TIngredient = {
   "image": "https://code.s3.yandex.net/react/code/sauce-03.png",
   "image_mobile": "https://code.s3.yandex.net/react/code/sauce-03-mobile.png",
   "image_large": "https://code.s3.yandex.net/react/code/sauce-03-large.png",
-  "__v": 0
+  "__v": 0,
+  _uid: expect.anything()
 }
 export const order: TOrder = {
   "_id": "641da997936b17001be72cde",
@@ -70,7 +74,7 @@ export const order: TOrder = {
   "createdAt": "2023-03-24T13:45:59.604Z",
   "updatedAt": "2023-03-24T13:46:00.012Z",
   "number": 45786,
-  "__v": 0
+  "__v": 0,
 }
 export const ordersData:TOrdersData = {
   orders: [order],

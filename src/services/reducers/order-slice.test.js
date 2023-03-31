@@ -117,12 +117,15 @@ describe('createOrder', () => {
     const store = mockStore();
 
     await store.dispatch(createOrder(order.ingredients))
-    const actions = store.getActions()
+    const actions = store.getActions();
+    console.log(actions);
     expect(actions[0]).toMatchObject({
       type: createOrder.pending.type,
       payload: undefined
     });
-    expect(actions[1]).toMatchObject({
+    expect(actions[1]).toMatchObject({ type: 'ingredients/dropIngridientsQty', payload: undefined });
+    expect(actions[2]).toMatchObject({ type: 'burger/dropBurgerState', payload: undefined });
+    expect(actions[3]).toMatchObject({
       type: createOrder.fulfilled.type,
       payload: fakeOrderData.order
     });

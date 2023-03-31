@@ -4,18 +4,15 @@ import { Input, PasswordInput, Button } from '@ya.praktikum/react-developer-burg
 import { useCallback, useEffect, useState } from 'react';
 import { auth } from '../services/api';
 import { TUser } from '../services/types/types';
+import { useForm } from '../hooks/useForm';
 
 export const ProfilePage = () => {
   const [failState, setFailState] = useState({ error: false, message: '' });
   const [isChanged, setChanged] = useState<boolean>(false);
 
 
-  const [form, setValue] = useState<TUser>({ email: '', name: '', password: '' });
+  const {form, handleChange, setValue} = useForm<TUser>({ email: '', name: '', password: '' }, () => {setChanged(true)});
 
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setValue({ ...form, [e.target.name]: e.target.value });
-    setChanged(true);
-  };
 
   const getUserInfo = useCallback(
     () => {
@@ -51,9 +48,9 @@ export const ProfilePage = () => {
         <article>
           {failState.error && failState.message && <p className='text-error'>{failState.message}</p>}
           <form className={styles.loginForm} onSubmit={onSubmit} >
-            <Input type='text' placeholder='Имя' extraClass='mb-6' icon='EditIcon' name="name" value={form.name} onChange={onChange} />
-            <Input type='email' placeholder='Логин' extraClass='mb-6' icon='EditIcon' name="email" value={form.email} onChange={onChange} />
-            <PasswordInput  placeholder='Пароль' icon='EditIcon' extraClass='mb-6' name="password" value='' onChange={onChange} />
+            <Input type='text' placeholder='Имя' extraClass='mb-6' icon='EditIcon' name="name" value={form.name} onChange={handleChange} />
+            <Input type='email' placeholder='Логин' extraClass='mb-6' icon='EditIcon' name="email" value={form.email} onChange={handleChange} />
+            <PasswordInput  placeholder='Пароль' icon='EditIcon' extraClass='mb-6' name="password" value='' onChange={handleChange} />
             {isChanged &&
               <>
                 <Button htmlType="submit" type='primary' extraClass='mb-20'>

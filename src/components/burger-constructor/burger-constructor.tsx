@@ -28,7 +28,7 @@ const BurgerConstructor = () => {
 
   const fillingContents = useMemo(
     () => filling.map((ingredient: TIngredient, index:number) => (
-      <FillingItem key={index} ingredient={ingredient} index={index} />
+      <FillingItem key={ingredient._uid} ingredient={ingredient} index={index} />
     )), [filling]
   )
 

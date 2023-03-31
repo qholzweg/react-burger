@@ -4,14 +4,11 @@ import { useState, useCallback } from 'react';
 import { Input, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import { Link } from 'react-router-dom';
 import { register } from '../services/api';
+import { useForm } from '../hooks/useForm';
 
 export const ForgotPasswordPage = () => {
-  const [form, setValue] = useState({ email: '' });
+  const {form, handleChange} = useForm({ email: '' });
   const navigate = useNavigate();
-
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setValue({ ...form, email: e.target.value });
-  };
 
   const onSubmit = useCallback(
     (e: React.SyntheticEvent) => {
@@ -32,7 +29,8 @@ export const ForgotPasswordPage = () => {
             type='email'
             placeholder='Укажите e-mail'
             extraClass='mb-6'
-            onChange={onChange}
+            name="email"
+            onChange={handleChange}
             value={form.email} />
           <Button htmlType="submit" type='primary' extraClass='mb-20'>
             Восстановить

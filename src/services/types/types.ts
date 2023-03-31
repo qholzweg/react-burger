@@ -11,6 +11,7 @@ export type TIngredient = {
   readonly image_mobile: string;
   readonly image_large: string;
   __v: number;
+  _uid?: string;
 }
 
 export type TOrderStatus = {

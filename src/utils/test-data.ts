@@ -1,4 +1,4 @@
-import { TIngredient } from "../services/types/types";
+import { TIngredient, TOrder, TOrdersData } from "../services/types/types";
 
 export const bunIngredient: TIngredient = {
   "_id": "60d3b41abdacab0026a733c6",
@@ -55,4 +55,38 @@ export const sauceIngredient: TIngredient = {
   "image_mobile": "https://code.s3.yandex.net/react/code/sauce-03-mobile.png",
   "image_large": "https://code.s3.yandex.net/react/code/sauce-03-large.png",
   "__v": 0
+}
+export const order: TOrder = {
+  "_id": "641da997936b17001be72cde",
+  "ingredients": [
+    "60d3b41abdacab0026a733c6",
+    "60d3b41abdacab0026a733c9",
+    "60d3b41abdacab0026a733c9",
+    "60d3b41abdacab0026a733c6"
+  ],
+  "owner": "63d59fc1936b17001be54da3",
+  "status": "done",
+  "name": "Бессмертный краторный бургер",
+  "createdAt": "2023-03-24T13:45:59.604Z",
+  "updatedAt": "2023-03-24T13:46:00.012Z",
+  "number": 45786,
+  "__v": 0
+}
+export const ordersData:TOrdersData = {
+  orders: [order],
+  total: 10,
+  totalToday:2
+}
+export const XHRHeaders = {
+  "cache": "no-cache",
+  "credentials": "same-origin",
+  "headers": { "Content-Type": "application/json" },
+  "method": "GET",
+  "mode": "cors",
+  "redirect": "follow",
+  "referrerPolicy": "no-referrer"
+}
+export const authHeaders = {
+  "Authorization": "Bearer undefined",
+  "Content-Type": "application/json",
 }

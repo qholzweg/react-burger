@@ -1,31 +1,36 @@
 import reducer, { setCurrentTab, getIngredients, increaseIngredientCount, decreaseIngredientCount, setIngredientCount, setIngredientCountByType, dropIngridientsState } from './ingredients-slice'
-import { bunIngredient, mainIngredient, sauceIngredient } from '../../utils/test-data';
+import { bunIngredient, mainIngredient, sauceIngredient, XHRHeaders } from '../../utils/test-data';
 import configureMockStore from "redux-mock-store";
 import thunk from "redux-thunk";
 import { INGREDIENTS_URL } from '../../utils/constants';
 
 describe('getIngredients', () => {
   const fakeIngredientsData = { success: true, data: [bunIngredient, mainIngredient] };
-  
+
   beforeEach(() => {
-    jest.resetAllMocks(); // сбрасываем все mock-функции перед каждым тестом
+    jest.resetAllMocks(); 
   });
-  
+
   it('returns the ingredients data when the API call is successful', async () => {
-    const mockFecth = jest.spyOn(global, 'fetch').mockResolvedValueOnce({ json: jest.fn().mockResolvedValueOnce(fakeIngredientsData) }); 
+    const mockFecth = jest
+      .spyOn(global, 'fetch')
+      .mockResolvedValueOnce({
+        json: jest.fn().mockResolvedValueOnce(fakeIngredientsData),
+        ok: true
+      });
     const middlewares = [thunk];
     const mockStore = configureMockStore(middlewares);
-    const store = mockStore({ all: [],
-      ingredientsRequest: false,
-      ingredientsFailed: false,
-      currentTab: 'buns' });
+    const store = mockStore();
 
     await store.dispatch(getIngredients())
     const actions = store.getActions()
-    expect(actions[0]).toMatchObject({ type: getIngredients.pending.type, payload: undefined });
-    expect(actions[1]).toMatchObject({ type: getIngredients.rejected.type, payload: undefined });
-    expect(actions[2]).toMatchObject({ type: getIngredients.fulfilled.type, payload: fakeIngredientsData });
-    expect(mockFecth).toHaveBeenCalledWith(INGREDIENTS_URL, {"cache": "no-cache", "credentials": "same-origin", "headers": {"Content-Type": "application/json"}, "method": "GET", "mode": "cors", "redirect": "follow", "referrerPolicy": "no-referrer"});
+    expect(actions[0]).toMatchObject({ 
+      type: getIngredients.pending.type, 
+      payload: undefined });
+    expect(actions[1]).toMatchObject({ 
+      type: getIngredients.fulfilled.type, 
+      payload: fakeIngredientsData.data });
+    expect(mockFecth).toHaveBeenCalledWith(INGREDIENTS_URL, XHRHeaders);
   });
 });
 
@@ -53,21 +58,22 @@ describe('Reduser', () => {
     })
   });
 
+  // extra reducers
   it('should set request status to pending', () => {
-    expect(reducer(initialState, {type: getIngredients.pending.type})).toEqual({
+    expect(reducer(initialState, { type: getIngredients.pending.type })).toEqual({
       ...initialState,
-      ingredientsRequest:true
+      ingredientsRequest: true
     })
   })
   it('should set request status to rejected', () => {
-    expect(reducer(initialState, {type: getIngredients.rejected.type})).toEqual({
+    expect(reducer(initialState, { type: getIngredients.rejected.type })).toEqual({
       ...initialState,
       ingredientsRequest: false,
       ingredientsFailed: true
     })
   })
   it('should set request status to fulfilled', () => {
-    expect(reducer(initialState, {type: getIngredients.fulfilled.type, payload: [bunIngredient]})).toEqual(stateWithIngredient)
+    expect(reducer(initialState, { type: getIngredients.fulfilled.type, payload: [bunIngredient] })).toEqual(stateWithIngredient)
   })
 
 

@@ -22,6 +22,8 @@ export type TOrder = TOrderStatus & {
   name?: string;
   ingredients: string[];
   _id?: string,
+  owner?: string,
+  __v?: number;
   createdAt: string;
   updatedAt: string;
 }

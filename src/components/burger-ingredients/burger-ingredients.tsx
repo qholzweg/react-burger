@@ -45,7 +45,7 @@ const IngredientsSection = React.forwardRef<Ref, { title: string, sectionName: s
     )), [collection]
   );
   return (
-    <section>
+    <section id={sectionName}>
       <h2 ref={ref} id={sectionName} className={`${styles.sectionTitle} text text_type_main-medium mb-6`}>{title}</h2>
       <ul className={`${styles.ingredientsSection} mb-10`}>
         {content}

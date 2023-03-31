@@ -8,12 +8,16 @@ import { WS_FEED } from '../utils/constants';
 import { selectFeed } from '../services/reducers/selectors';
 import { TWebsocketStatus } from '../services/types/types';
 import { Preloader } from '../utils';
+import { orderClose } from '../services/reducers/order-slice';
 
 export default function FeedPage() {
   const dispatch = useAppDispatch();
   useEffect(() => {
     dispatch(feedConnect(WS_FEED));
-    return () => {dispatch(feedDisconnect())};
+    return () => {
+      dispatch(feedDisconnect());
+      dispatch(orderClose());
+    };
   }, [dispatch]);
   const { status } = useAppSelector(selectFeed);
 

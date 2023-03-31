@@ -1,4 +1,4 @@
-import {feedReducer as reducer} from './reducers'
+import { historyReducer as reducer } from './reducers'
 import { TWebsocketStatus } from '../../types/types';
 import { ordersData } from '../../../utils/test-data';
 import * as actions from './actions'
@@ -17,7 +17,7 @@ describe('Reduser', () => {
   });
   it('should set connecting status', () => {
     expect(reducer(initialState, {
-      type: actions.wsFeedConnecting
+      type: actions.wsHistoryConnecting
     })).toEqual({
       ...initialState,
       status: TWebsocketStatus.CONNECTING
@@ -25,7 +25,7 @@ describe('Reduser', () => {
   })
   it('should set open status', () => {
     expect(reducer(initialState, {
-      type: actions.wsFeedOpen
+      type: actions.wsHistoryOpen
     })).toEqual({
       ...initialState,
       status: TWebsocketStatus.ONLINE
@@ -33,7 +33,7 @@ describe('Reduser', () => {
   })
   it('should set close status', () => {
     expect(reducer(initialState, {
-      type: actions.wsFeedClose
+      type: actions.wsHistoryClose
     })).toEqual({
       ...initialState,
       status: TWebsocketStatus.OFFLINE
@@ -41,7 +41,7 @@ describe('Reduser', () => {
   })
   it('should set error status', () => {
     expect(reducer(initialState, {
-      type: actions.wsFeedError,
+      type: actions.wsHistoryError,
       payload: error
     })).toEqual({
       ...initialState,
@@ -50,7 +50,7 @@ describe('Reduser', () => {
   })
   it('should set message', () => {
     expect(reducer(initialState, {
-      type: actions.wsFeedMessage,
+      type: actions.wsHistoryMessage,
       payload: ordersData
     })).toEqual({
       ...initialState,

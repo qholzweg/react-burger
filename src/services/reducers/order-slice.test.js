@@ -1,15 +1,9 @@
 import { ORDERS_URL } from '../../utils/constants';
 import { authHeaders, order, XHRHeaders } from '../../utils/test-data';
-import reducer, { orderOpen, orderClose, createOrder, getOrder } from './order-slice'
+import reducer, { orderOpen, orderClose, createOrder, getOrder, orderInitialState as initialState } from './order-slice'
 import configureMockStore from "redux-mock-store";
 import thunk from "redux-thunk";
 
-const initialState = {
-  order: null,
-  orderRequest: false,
-  orderFailed: false,
-  isOrderModalOpen: false
-};
 const stateWithOrder = {
   ...initialState,
   order: order

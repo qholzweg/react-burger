@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { TBurgerContent, TIngredient } from "../types/types";
-import { decreaseIngredientCount, increaseIngredientCount, setIngredientCount, setIngredientCountByType } from "./ingredients-slice";
+import { decreaseIngredientCount, dropIngridientsQty, increaseIngredientCount, setIngredientCount, setIngredientCountByType } from "./ingredients-slice";
 import { selectIngredient } from "./selectors";
 import type { RootState, AppDispatch } from '../store'
 
@@ -29,7 +29,7 @@ type TburegerState = {
   total: number;
 }
 
-const burgerInitialState: TburegerState = {
+export const burgerInitialState: TburegerState = {
   selected: {
     bun: null,
     filling: []
@@ -55,6 +55,13 @@ export const burgerSlice = createSlice({
     },
     deleteItem: (state, action: PayloadAction<number>) => {
       state.selected = { bun: state.selected.bun, filling: deleteElement(state.selected.filling, action.payload) }
+    },
+    dropBurgerState: (state) => {
+      state.selected = {
+        bun: null,
+        filling: []
+      };
+      state.total = 0;
     }
   }
 });
@@ -76,7 +83,11 @@ export const deleteIngredient = ({ id, index }: { id: string, index: number }) =
   dispatch(deleteItem(index));
   dispatch(decreaseIngredientCount(id))
 }
+export const clearConstructor = () => (dispatch: AppDispatch) => {
+  dispatch(dropIngridientsQty());
+  dispatch(dropBurgerState())
+}
 
-export const { addSelectedItem, countTotal, moveSelectedItem, deleteItem } = burgerSlice.actions;
+export const { addSelectedItem, countTotal, moveSelectedItem, deleteItem, dropBurgerState } = burgerSlice.actions;
 
 export default burgerSlice.reducer;

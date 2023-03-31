@@ -8,20 +8,29 @@ import { auth } from '../../../services/api';
 import { createOrder, orderClose } from '../../../services/reducers/order-slice';
 import { TBurgerContent } from '../../../services/types/types';
 import { useAppDispatch, useAppSelector } from '../../../hooks/store';
+import { useNavigate } from 'react-router-dom';
+import { clearConstructor } from '../../../services/reducers/burger-slice';
 
 const findIds = (content: TBurgerContent) => [content.bun, ...content.filling].map((el) => el ? el._id : null)
 
 export default function Order() {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate()
   const { selected, total } = useAppSelector(selectBurger);
   const { isOrderModalOpen } = useAppSelector(selectOrder);
   const isLoggedIn = auth.isLoggedIn();
-  const disabled = selected.bun && isLoggedIn ? false : true;
+  const disabled = selected.bun === null;
 
   const handleOrderOpen = () => {
+    if(!isLoggedIn) {
+      navigate('/login');
+      return;
+    }
     const ids = findIds(selected);
     if (!disabled) {
-      dispatch(createOrder(ids));
+      dispatch(createOrder(ids)).then(
+        //dispatch(clearConstructor())
+      );
     }
   }
   const handleOrderClose = () => {

@@ -7,7 +7,7 @@ export type FeedStore = TOrdersData & {
   connectionError: string,
 }
 
-const initialState: FeedStore = {
+export const initialState: FeedStore = {
   status: TWebsocketStatus.OFFLINE,
   connectionError: '',
   orders: [],

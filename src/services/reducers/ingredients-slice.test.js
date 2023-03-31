@@ -1,4 +1,4 @@
-import reducer, { setCurrentTab, getIngredients, increaseIngredientCount, decreaseIngredientCount, setIngredientCount, setIngredientCountByType, dropIngridientsState } from './ingredients-slice'
+import reducer, { setCurrentTab, getIngredients, increaseIngredientCount, decreaseIngredientCount, setIngredientCount, setIngredientCountByType, dropIngridientsState, ingredientsInitialState as initialState, dropIngridientsQty } from './ingredients-slice'
 import { bunIngredient, mainIngredient, sauceIngredient, XHRHeaders } from '../../utils/test-data';
 import configureMockStore from "redux-mock-store";
 import thunk from "redux-thunk";
@@ -35,12 +35,6 @@ describe('getIngredients', () => {
 });
 
 describe('Reduser', () => {
-  const initialState = {
-    all: [],
-    ingredientsRequest: false,
-    ingredientsFailed: false,
-    currentTab: 'buns'
-  };
   const stateWithIngredient = {
     ...initialState,
     all: [
@@ -117,16 +111,20 @@ describe('Reduser', () => {
       sauceIngredient
     ]
   }
+  const stateWithIncreasedQty = {
+    ...stateWithIngredients,
+    all: [
+      bunIngredient,
+      mainIngredient,
+      { ...sauceIngredient, __v: 2 },
+      { ...sauceIngredient, __v: 2 },
+    ]
+  }
   it('should set ingredient count by type', () => {
-    expect(reducer(stateWithIngredients, setIngredientCountByType({ ingredientType: 'sauce', count: 2 }))).toEqual({
-      ...stateWithIngredients,
-      all: [
-        bunIngredient,
-        mainIngredient,
-        { ...sauceIngredient, __v: 2 },
-        { ...sauceIngredient, __v: 2 },
-      ]
-    })
+    expect(reducer(stateWithIngredients, setIngredientCountByType({ ingredientType: 'sauce', count: 2 }))).toEqual(stateWithIncreasedQty)
+  });
+  it('should drop ingredient\'s qty', () => {
+    expect(reducer(stateWithIncreasedQty, dropIngridientsQty())).toEqual(stateWithIngredients)
   });
   it('should drop state', () => {
     expect(reducer(stateCount2, dropIngridientsState())).toEqual(initialState)

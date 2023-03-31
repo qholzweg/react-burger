@@ -1,16 +1,9 @@
-import reducer, { addSelectedItem, countTotal, moveSelectedItem, deleteItem, deleteIngredient, addSelectedItemById } from './burger-slice'
+import reducer, { addSelectedItem, countTotal, moveSelectedItem, deleteItem, deleteIngredient, addSelectedItemById, burgerInitialState as initialState, dropBurgerState, clearConstructor } from './burger-slice'
 import { bunIngredient, bun2Ingredient, mainIngredient, sauceIngredient } from '../../utils/test-data';
 import configureMockStore from "redux-mock-store";
 import thunk from "redux-thunk";
 
 describe('Reduser', () => {
-  const initialState = {
-    selected: {
-      bun: null,
-      filling: []
-    },
-    total: 0
-  };
   const someBurgerState = {
     ...initialState,
     selected: {
@@ -66,6 +59,9 @@ describe('Reduser', () => {
       }
     });
   });
+  it('should drop state', () => {
+    expect(reducer(someBurgerState, dropBurgerState())).toEqual(initialState);
+  })
   it('should count total', () => {
     expect(reducer(someBurgerState, countTotal())).toEqual({
       ...someBurgerState,
@@ -88,6 +84,7 @@ describe('Reduser', () => {
 });
 
 describe('Reducer thunks', () => {
+  
   const middlewares = [thunk];
   const mockStore = configureMockStore(middlewares);
   let store = mockStore();
@@ -103,19 +100,22 @@ describe('Reducer thunks', () => {
       payload: 'id'
     });
   });
-  it('dispatches actioans to add bun', () => {
-    const storeWithIngredients = {
-      ingredients: {
-        all: [
-          bunIngredient,
-          mainIngredient
-        ]
-      }
-    }
 
+  const storeWithIngredients = {
+    ingredients: {
+      all: [
+        bunIngredient,
+        mainIngredient
+      ]
+    }
+  }
+  beforeEach(() => {
     store = mockStore(storeWithIngredients);
+  })
+  it('dispatches actioans to add bun', () => {
+
     store.dispatch(addSelectedItemById({ id: bunIngredient._id }));
-    let actions = store.getActions();
+    const actions = store.getActions();
     expect(actions[0]).toMatchObject({
       type: 'burger/addSelectedItem',
       payload: bunIngredient
@@ -132,10 +132,11 @@ describe('Reducer thunks', () => {
       type: 'burger/countTotal',
       payload: undefined
     });
-    
-    store = mockStore(storeWithIngredients);
+  })
+
+  it('dispatches actions to add main', () => {
     store.dispatch(addSelectedItemById({ id: mainIngredient._id }));
-    actions = store.getActions();
+    const actions = store.getActions();
     expect(actions[0]).toMatchObject({
       type: 'burger/addSelectedItem',
       payload: mainIngredient
@@ -148,5 +149,18 @@ describe('Reducer thunks', () => {
       type: 'burger/countTotal',
       payload: undefined
     });
+  })
+
+  it('dispatches actions to clear constructor', () => {
+    store.dispatch(clearConstructor());
+    const actions = store.getActions();
+    expect(actions[0]).toMatchObject({
+      type: 'ingredients/dropIngridientsQty',
+      payload: undefined
+    })
+    expect(actions[1]).toMatchObject({
+      type: 'burger/dropBurgerState',
+      payload: undefined
+    })
   })
 });

@@ -1,16 +1,9 @@
-import { historyReducer as reducer } from './reducers'
+import { historyReducer as reducer, initialState } from './reducers'
 import { TWebsocketStatus } from '../../types/types';
 import { ordersData } from '../../../utils/test-data';
 import * as actions from './actions'
 
 describe('Reduser', () => {
-  const initialState = {
-    status: TWebsocketStatus.OFFLINE,
-    connectionError: '',
-    orders: [],
-    total: 0,
-    totalToday: 0
-  };
   const error = 'error';
   it('should return initial state', () => {
     expect(reducer(undefined, { type: undefined })).toEqual(initialState);

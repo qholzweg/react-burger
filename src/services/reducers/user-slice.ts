@@ -4,7 +4,7 @@ type TUserState = {
   resetRequested: boolean;
 }
 
-const initialState: TUserState = {
+export const initialState: TUserState = {
   resetRequested: false
 }
 export const userSlice = createSlice({

@@ -1,6 +1,6 @@
 describe('Feed', () => {
   beforeEach(() => {
-    cy.visit('http://localhost:3000/profile');
+    cy.visit('profile');
     cy.setCookie('accessToken', 'test-accessToken');
     cy.intercept("GET", "api/ingredients", { fixture: "ingredients.json" });
     cy.intercept("GET", "api/auth/user", { fixture: "user.json" });

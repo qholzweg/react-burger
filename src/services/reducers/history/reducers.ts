@@ -7,7 +7,7 @@ export type HistoryStore = TOrdersData & {
   connectionError: string,
 }
 
-const initialState: HistoryStore = {
+export const initialState: HistoryStore = {
   status: TWebsocketStatus.OFFLINE,
   connectionError: '',
   orders: [],

@@ -37,7 +37,7 @@ type TOrderState = {
   isOrderModalOpen: boolean;
 }
 
-const orderInitialState:TOrderState = {
+export const orderInitialState:TOrderState = {
   order: null,
   orderRequest: false,
   orderFailed: false,

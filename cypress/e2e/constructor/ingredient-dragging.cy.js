@@ -2,9 +2,8 @@ describe("Drag and Drop", () => {
   const ingClass = '[class^=burger-ingredients_ingredient__]';
   beforeEach(function () {
     cy.setCookie('accessToken', 'test-accessToken');
-    cy.visit('http://localhost:3000');
+    cy.visit('/');
     cy.intercept("GET", "api/ingredients", { fixture: "ingredients.json" });
-    //cy.intercept("GET", "api/auth/user", { fixture: "user.json" });   //при необходимости (зависит от логики твоего приложения)
     cy.intercept("POST", "api/orders", { fixture: "post_order.json" }).as("postOrder");
   });
   afterEach(function () {

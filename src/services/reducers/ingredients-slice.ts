@@ -19,7 +19,7 @@ type TIngredientsState = {
   currentTab: TBunTypes;
 }
 
-const ingredientsInitialState: TIngredientsState = {
+export const ingredientsInitialState: TIngredientsState = {
   all: [],
   ingredientsRequest: false,
   ingredientsFailed: false,
@@ -46,6 +46,9 @@ export const ingredientsSlice = createSlice({
     setIngredientCountByType: (state, action:PayloadAction<{ingredientType?: string, count:number}>) => {
       state.all = [...state.all].map(item => item.type === action.payload?.ingredientType ? { ...item, __v: action.payload?.count } : item)
     },
+    dropIngridientsQty: (state) => {
+      state.all = [...state.all].map(item => {return {...item, __v: 0}})
+    },
     //возвращает к начальному значению стейт ингредиентов
     dropIngridientsState: (state) => {
       state.all = []
@@ -68,6 +71,6 @@ export const ingredientsSlice = createSlice({
   }
 });
 
-export const { setCurrentTab, increaseIngredientCount, decreaseIngredientCount, setIngredientCount, setIngredientCountByType, dropIngridientsState } = ingredientsSlice.actions;
+export const { setCurrentTab, increaseIngredientCount, decreaseIngredientCount, setIngredientCount, setIngredientCountByType, dropIngridientsState, dropIngridientsQty } = ingredientsSlice.actions;
 
 export default ingredientsSlice.reducer;

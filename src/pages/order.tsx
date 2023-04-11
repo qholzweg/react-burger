@@ -11,7 +11,7 @@ export const OrderPage = () => {
   const { id } = useParams();
   useEffect(() => {
     if (id) dispatch(getOrder(id))
-  }, [])
+  }, [dispatch, id])
   const { order } = useAppSelector(selectOrder);
 
   if (!order) return (<NotFound404 />);

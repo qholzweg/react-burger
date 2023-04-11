@@ -65,8 +65,8 @@ const FillingItem: FC<{ ingredient: TIngredient, index: number }> = ({ ingredien
     },
   });
   drag(drop(ref));
-  const handleDelete = (id: string) => {
-    dispatch(deleteIngredient({ id: id }));
+  const handleDelete = (index: number, id: string) => {
+    dispatch(deleteIngredient({ id: id, index: index }));
   }
   return (
     <li ref={ref} data-handler-id={handlerId} style={{ opacity: opacity }}>
@@ -76,7 +76,7 @@ const FillingItem: FC<{ ingredient: TIngredient, index: number }> = ({ ingredien
         price={ingredient.price}
         thumbnail={ingredient.image_mobile}
         extraClass="ml-9"
-        handleClose={() => handleDelete(ingredient._id)}
+        handleClose={() => handleDelete(index, ingredient._id)}
       />
     </li>
   );

@@ -1,8 +1,9 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { TBurgerContent, TIngredient } from "../types/types";
-import { decreaseIngredientCount, increaseIngredientCount, setIngredientCount, setIngredientCountByType } from "./ingredients-slice";
+import { decreaseIngredientCount, dropIngridientsQty, increaseIngredientCount, setIngredientCount, setIngredientCountByType } from "./ingredients-slice";
 import { selectIngredient } from "./selectors";
-import type { RootState, AppDispatch } from '../store'
+import type { RootState, AppDispatch } from '../store';
+import uuid from 'react-uuid';
 
 function countTotalFn(content: TBurgerContent) {
   let total = 0;
@@ -11,9 +12,9 @@ function countTotalFn(content: TBurgerContent) {
   if (filling && filling.length) total += filling.reduce((acc, current) => acc + current.price, 0);
   return total;
 }
-function deleteElement(array: TIngredient[], id: string) {
+function deleteElement(array: TIngredient[], index: number) {
   let arrayCopy = [...array];
-  arrayCopy.splice(arrayCopy.findIndex(item => item._id === id), 1);
+  arrayCopy.splice(index, 1);
   return arrayCopy;
 }
 function moveElement(array: TIngredient[], fromIndex: number, toIndex: number) {
@@ -29,7 +30,7 @@ type TburegerState = {
   total: number;
 }
 
-const burgerInitialState: TburegerState = {
+export const burgerInitialState: TburegerState = {
   selected: {
     bun: null,
     filling: []
@@ -42,7 +43,7 @@ export const burgerSlice = createSlice({
   initialState: burgerInitialState,
   reducers: {
     addSelectedItem: (state, action: PayloadAction<TIngredient>) => {
-      const item = action.payload;
+      const item = {...action.payload, _uid: uuid()};
       state.selected = item.type === 'bun' ?
         { bun: item, filling: state.selected.filling } :
         { bun: state.selected.bun, filling: [...state.selected.filling, item] };
@@ -50,11 +51,18 @@ export const burgerSlice = createSlice({
     countTotal: (state) => {
       state.total = countTotalFn(state.selected)
     },
-    moveSelectedItem: (state, action: PayloadAction<{from:number, to:number}>) => {
+    moveSelectedItem: (state, action: PayloadAction<{ from: number, to: number }>) => {
       state.selected = { bun: state.selected.bun, filling: moveElement(state.selected.filling, action.payload?.from, action.payload?.to) }
     },
-    deleteSelectedItem: (state, action: PayloadAction<string>) => {
+    deleteItem: (state, action: PayloadAction<number>) => {
       state.selected = { bun: state.selected.bun, filling: deleteElement(state.selected.filling, action.payload) }
+    },
+    dropBurgerState: (state) => {
+      state.selected = {
+        bun: null,
+        filling: []
+      };
+      state.total = 0;
     }
   }
 });
@@ -72,11 +80,15 @@ export const addSelectedItemById = ({ id }: { id: string }) => (dispatch: AppDis
   dispatch(countTotal());
 };
 
-export const deleteIngredient = ({ id }: { id: string }) => (dispatch: AppDispatch) => {
-  dispatch(deleteSelectedItem(id));
+export const deleteIngredient = ({ id, index }: { id: string, index: number }) => (dispatch: AppDispatch) => {
+  dispatch(deleteItem(index));
   dispatch(decreaseIngredientCount(id))
 }
+export const clearConstructor = () => (dispatch: AppDispatch) => {
+  dispatch(dropIngridientsQty());
+  dispatch(dropBurgerState());
+}
 
-export const { addSelectedItem, countTotal, moveSelectedItem, deleteSelectedItem } = burgerSlice.actions;
+export const { addSelectedItem, countTotal, moveSelectedItem, deleteItem, dropBurgerState } = burgerSlice.actions;
 
 export default burgerSlice.reducer;

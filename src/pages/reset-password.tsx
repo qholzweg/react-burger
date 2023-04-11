@@ -3,15 +3,12 @@ import { Input, PasswordInput, Button } from '@ya.praktikum/react-developer-burg
 import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { useState, useCallback } from 'react';
 import { register } from '../services/api';
+import { useForm } from '../hooks/useForm';
 
 export const ResetPasswordPage = () => {
-  const [form, setValue] = useState({ password: '', token: '' });
+  const {form, handleChange} = useForm({ password: '', token: '' });
   const [failState, setFailState] = useState({ error: false, message: '' });
   const navigate = useNavigate();
-
-  const onChange = (e:React.ChangeEvent<HTMLInputElement>) => {
-    setValue({ ...form, [e.target.name]: e.target.value });
-  };
 
   const onSubmit = useCallback(
     (e:React.SyntheticEvent) => {
@@ -37,8 +34,8 @@ export const ResetPasswordPage = () => {
         <form className={styles.loginForm} onSubmit={onSubmit} >
           <h3 className='text text_type_main-medium mb-6'>Восстановление пароля</h3>
           {failState.error && <p className='text mb-4 text-error'>Произошла ошибка: {failState.message}</p>}
-          <PasswordInput name='password' placeholder='Введите новый пароль' extraClass='mb-6' value={form.password} onChange={onChange} />
-          <Input type='text' name='token' placeholder='Введите код из письма' extraClass='mb-6' value={form.token} onChange={onChange} />
+          <PasswordInput name='password' placeholder='Введите новый пароль' extraClass='mb-6' value={form.password} onChange={handleChange} />
+          <Input type='text' name='token' placeholder='Введите код из письма' extraClass='mb-6' value={form.token} onChange={handleChange} />
           <Button htmlType="submit" type='primary' extraClass='mb-20'>
             Сохранить
           </Button>

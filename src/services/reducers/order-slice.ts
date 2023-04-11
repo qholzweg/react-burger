@@ -1,6 +1,8 @@
 import { createAsyncThunk, createSlice, isFulfilled, isPending, isRejected, PayloadAction } from "@reduxjs/toolkit"
 import { TOrder } from "../types/types";
 import { order } from '../api'
+import { clearConstructor } from "./burger-slice";
+import { AppDispatch } from "../store";
 
 export const getOrder = createAsyncThunk(
   'order/fetchOrder',
@@ -9,10 +11,11 @@ export const getOrder = createAsyncThunk(
     return response.orders[0];
   }
 );
-export const createOrder = createAsyncThunk(
+export const createOrder = createAsyncThunk<TOrder,  (string|null)[], {dispatch: AppDispatch}>(
   'order/createOrder',
-  async (ids:(string|null)[]) => {
+  async (ids, thunkApi) => {
     const response = await order.post(ids);
+    thunkApi.dispatch(clearConstructor());
     return response.order;
   }
 );
@@ -37,7 +40,7 @@ type TOrderState = {
   isOrderModalOpen: boolean;
 }
 
-const orderInitialState:TOrderState = {
+export const orderInitialState:TOrderState = {
   order: null,
   orderRequest: false,
   orderFailed: false,

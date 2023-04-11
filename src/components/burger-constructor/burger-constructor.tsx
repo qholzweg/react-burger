@@ -3,7 +3,6 @@ import { ConstructorElement } from '@ya.praktikum/react-developer-burger-ui-comp
 import { EmptyConstructorElement } from './empty-constructor-element/empty-constructor-element';
 import { addSelectedItemById } from '../../services/reducers/burger-slice';
 import { useDrop } from 'react-dnd';
-import uuid from 'react-uuid';
 
 import styles from './burger-constructor.module.css';
 import FillingItem from './filling-item'
@@ -29,7 +28,7 @@ const BurgerConstructor = () => {
 
   const fillingContents = useMemo(
     () => filling.map((ingredient: TIngredient, index:number) => (
-      <FillingItem key={uuid()} ingredient={ingredient} index={index} />
+      <FillingItem key={ingredient._uid} ingredient={ingredient} index={index} />
     )), [filling]
   )
 

@@ -6,7 +6,7 @@ import { selectOrder } from '../../../services/reducers/selectors';
 
 export default function OrderDetails() {
   const { order, orderRequest, orderFailed } = useSelector(selectOrder);
-  if (orderRequest) return (<div className={styles.loader}><img src={loader} /></div>);
+  if (orderRequest) return (<div className={styles.loader}><img src={loader} alt="Loading..." /></div>);
   if (orderFailed) return ( <p className='text text_type-main_default text-error'>Что-то пошло не так, пожалуйста, проверьте подключение к интернет и попробуйте еще раз</p>);
   
   if (!order) return null;

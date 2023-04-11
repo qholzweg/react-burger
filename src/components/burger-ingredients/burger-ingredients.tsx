@@ -2,12 +2,12 @@ import React, { FC, useRef, useMemo } from 'react';
 import { Counter, Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './burger-ingredients.module.css';
 import Price from '../price/price';
-import { useSelector, useDispatch } from 'react-redux';
 import { setCurrentTab } from '../../services/reducers/ingredients-slice';
 import { useDrag } from 'react-dnd';
 import { selectIngredients } from '../../services/reducers/selectors';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { TIngredient } from '../../services/types/types';
+import { useAppDispatch, useAppSelector } from '../../hooks/store';
 
 const Ingredient: FC<{ ingredient: TIngredient, count: number }> = ({ ingredient, count }) => {
   const navigate = useNavigate();
@@ -45,7 +45,7 @@ const IngredientsSection = React.forwardRef<Ref, { title: string, sectionName: s
     )), [collection]
   );
   return (
-    <section>
+    <section id={sectionName}>
       <h2 ref={ref} id={sectionName} className={`${styles.sectionTitle} text text_type_main-medium mb-6`}>{title}</h2>
       <ul className={`${styles.ingredientsSection} mb-10`}>
         {content}
@@ -56,8 +56,8 @@ const IngredientsSection = React.forwardRef<Ref, { title: string, sectionName: s
 );
 
 const BurgerIngredients = () => {
-  const { all, currentTab } = useSelector(selectIngredients);
-  const dispatch = useDispatch();
+  const { all, currentTab } = useAppSelector(selectIngredients);
+  const dispatch = useAppDispatch();
 
   const bunRef = useRef<Ref>(null);
   const sauceRef = useRef<Ref>(null);

@@ -1,7 +1,6 @@
 import { ActionCreatorWithoutPayload, ActionCreatorWithPayload } from '@reduxjs/toolkit';
 import { Middleware } from 'redux';
 import { RootState } from '../store';
-import { auth } from '../api';
 
 export type TwsActionTypes = {
     wsConnect: ActionCreatorWithPayload<string>,
@@ -39,8 +38,8 @@ export const socketMiddleware = (wsActions: TwsActionTypes): Middleware<{}, Root
           };
   
           socket.onerror = err  => {
-            console.log('error')
-            console.log(err)
+            // console.error('error')
+            console.error(err)
           };
   
           socket.onmessage = event => {
@@ -51,10 +50,10 @@ export const socketMiddleware = (wsActions: TwsActionTypes): Middleware<{}, Root
   
           socket.onclose = event => {
             if (event.code !== 1000) {
-              console.log('error ' + event.code.toString())
+              console.error('error ' + event.code.toString())
               dispatch(onError(event.code.toString()));
             }
-            console.log('close')
+            // console.log('close')
             dispatch(onClose());
 
             if (isConnected) {
@@ -67,12 +66,12 @@ export const socketMiddleware = (wsActions: TwsActionTypes): Middleware<{}, Root
           };
   
           if (wsSendMessage && wsSendMessage.match(action)) {
-            console.log('send')
+            // console.log('send')
             socket.send(JSON.stringify(action.payload));
           }
 
           if (wsDisconnect.match(action)) {
-            console.log('disconnect')
+            // console.log('disconnect')
             clearTimeout(reconnectTimer)
             isConnected = false;
             reconnectTimer = 0;

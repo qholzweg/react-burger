@@ -2,16 +2,27 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
+import {
+  createHashRouter,
+  RouterProvider,
+} from "react-router-dom";
 import reportWebVitals from './reportWebVitals';
 import { store } from './services/store';
 import { Provider } from 'react-redux';
+
+const router = createHashRouter([
+  {
+    path: "/*",
+    element: <App />,
+  }
+]);
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLDivElement);
 
 root.render(
   <React.StrictMode>
     <Provider store={store} >
-      <App />
+      <RouterProvider router={router} />
     </Provider>
   </React.StrictMode>
 );
